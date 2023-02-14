@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+}
+button {
+  cursor: pointer;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: ForestGreen;
+  color: white;
+  font-weight: 600;
+}
+.number-btn-outer {
+  cursor: pointer;
+}
+.number-btn-outer.incorrected {
+  cursor: default;
+}
+.number-btn-outer.incorrected > rect {
+  stroke: Gainsboro;
+}
+.number-btn-outer.incorrected > text {
+  fill: Gainsboro;
+}
+.square-text.corrected {
+  fill: black;
+}
+.incorrect-toast {
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.incorrect-toast.visible {
+  opacity: 1;
+}
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: all 0.25s;
+}
+.modal-overlay.visible {
+  opacity: 1;
+}
+.modal-container {
+  width: 40%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: white;
+}
+.modal-container > h1 {
+  margin: 0;
+}
