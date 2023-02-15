@@ -9,43 +9,43 @@ showModal({
   buttons: [
     {
       text: opt.BTN_TEXT_CUSTOM,
-      action(firstNumCandidate, secondNumCandidate) {
+      action(firstNum, secondNum) {
         const $introErrorMessage = document.querySelector('.intro-error-message')
 
-        if (Number.isNaN(firstNumCandidate) || Number.isNaN(secondNumCandidate)) {
+        if (Number.isNaN(firstNum) || Number.isNaN(secondNum)) {
           $introErrorMessage.innerText = opt.MSG_ERROR_NAN
           return
         }
-        if (firstNumCandidate + secondNumCandidate > 9) {
+        if (firstNum + secondNum > 9) {
           $introErrorMessage.innerText = opt.MSG_ERROR_OVER_NINE
           return
         }
-        if (firstNumCandidate < 1 || secondNumCandidate < 1) {
+        if (firstNum < 1 || secondNum < 1) {
           $introErrorMessage.innerText = opt.MSG_ERROR_UNDER_ONE
           return
         }
 
         hideModal()
-        render(firstNumCandidate, secondNumCandidate)
+        render(firstNum, secondNum)
       }
     },
     {
       text: opt.BTN_TEXT_RANDOM_1,
       action() {
-        const firstNumCandidate = ~~(Math.random() * 8) + 1
+        const firstNum = ~~(Math.random() * 8) + 1
         
         hideModal()
-        render(firstNumCandidate, 1)
+        render(firstNum, 1)
       }
     },
     {
       text: opt.BTN_TEXT_RANDOM_2,
       action() {
-        const firstNumCandidate = ~~(Math.random() * 8) + 1
-        const secondNumCandidate = ~~(Math.random() * (9 - firstNumCandidate)) + 1
+        const firstNum = ~~(Math.random() * 8) + 1
+        const secondNum = ~~(Math.random() * (9 - firstNum)) + 1
 
         hideModal()
-        render(firstNumCandidate, secondNumCandidate)
+        render(firstNum, secondNum)
       }
     }
   ]
