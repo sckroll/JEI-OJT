@@ -9,14 +9,37 @@ button {
   background-color: ForestGreen;
   color: white;
   font-weight: 600;
+  transition: all 0.25s;
+}
+button:hover {
+  transform: scale(1.1);
+}
+button:active {
+  background-color: darkgreen;
+}
+input {
+  border: 2px solid lightgrey;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1.25rem;
 }
 .number-btn-outer {
   cursor: pointer;
+}
+.number-btn-outer > * {
+  transition: fill 0.15s;
+}
+.number-btn-outer:hover > rect {
+  fill: skyblue;
+}
+.number-btn-outer:hover > text {
+  fill: white;
 }
 .number-btn-outer.incorrected {
   cursor: default;
 }
 .number-btn-outer.incorrected > rect {
+  fill: white;
   stroke: Gainsboro;
 }
 .number-btn-outer.incorrected > text {
@@ -49,16 +72,42 @@ button {
   opacity: 1;
 }
 .modal-container {
-  width: 40%;
-  height: 30%;
+  min-width: 40%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  gap: 1rem;
+  padding: 2rem;
   border-radius: 1rem;
   background-color: white;
 }
 .modal-container > h1 {
   margin: 0;
+}
+.modal-container > p {
+  margin: 0;
+}
+.modal-button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.num-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+}
+.num-input {
+  width: 32px;
+}
+.intro-error-message {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: crimson;
+  font-size: 0.8rem;
 }
