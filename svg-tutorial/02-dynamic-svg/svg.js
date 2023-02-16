@@ -312,6 +312,7 @@ const buttonHandler = ({ target }) => {
   } else {
     leftCnt--
     document.getElementsByClassName('number-btn-outer')[myAnswer].classList.add('incorrected')
+    document.getElementsByClassName('incorrect-counter')[2 - leftCnt].classList.add('incorrected')
     isChecked[myAnswer] = true
 
     if (leftCnt === 0) {
@@ -334,6 +335,36 @@ const buttonHandler = ({ target }) => {
     } else {
       showToast()
     }
+  }
+}
+
+/**
+ * 틀린 횟수 카운터 렌더링
+ */
+const renderIncorrectCounter = parent => {
+  const $incorrectCounterContainer = createSVGElement({
+    type: 'svg',
+    parent,
+    attributes: {
+      x: 680,
+      y: 30
+    }
+  })
+
+  for (let i = 0; i < 3; i++) {
+    createSVGElement({
+      type: 'circle',
+      parent: $incorrectCounterContainer,
+      attributes: {
+        cx: 12 + 32 * i,
+        cy: 12,
+        r: 10,
+        fill: 'white',
+        stroke: 'lightcoral',
+        'stroke-width': 2,
+        class: 'incorrect-counter'
+      }
+    })
   }
 }
 
@@ -364,4 +395,5 @@ export const render = (firstNumCandidate, secondNumCandidate) => {
   renderProblemText($svgContainer, firstNum, secondNum)
   renderToast($svgContainer)
   renderAnswerButtons($svgContainer, buttonHandler)
+  renderIncorrectCounter($svgContainer)
 }

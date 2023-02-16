@@ -111,3 +111,6 @@ input {
   color: crimson;
   font-size: 0.8rem;
 }
+.incorrect-counter.incorrected {
+  fill: lightcoral;
+}
