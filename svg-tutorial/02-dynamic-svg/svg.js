@@ -40,7 +40,7 @@ const renderSVGContainer = () => {
 }
 
 /**
- * 우측 상단 타이틀 렌더링
+ * 좌측 상단 타이틀 렌더링
  */
 const renderTitle = parent => {
   const $titleContainer = createSVGElement({
