@@ -85,20 +85,14 @@ const renderTitle = parent => {
  * 문제 이미지 렌더링
  */
 const renderQuestionImage = (parent, firstNum, secondNum) => {
-  const vw = window.innerWidth
-  const vh = window.innerHeight
-
   const $questionImageContainer = createSVGElement({
     type: 'svg',
     parent,
     attributes: {
-      // x: `calc(50% - ${72}px)`,
       x: `${42 - (firstNum + secondNum - 2) * 2.5}%`,
-      // y: '15%',
       width: '50%',
       height: '50%',
       viewBox: '0 0 220 20'
-      // viewBox: `${-(firstNum + secondNum + 9) * 16} ${-vh / 8} ${vw / 2} ${vh / 2}`
     }
   })
 
