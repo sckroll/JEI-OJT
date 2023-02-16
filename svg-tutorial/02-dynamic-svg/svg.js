@@ -1,10 +1,7 @@
 import opt from './options.js'
+import { audio, availableNums } from './store.js'
 import { showModal, hideModal } from './modal.js'
 import { showToast } from './toast.js'
-
-const audioClick = new Audio(opt.AUDIO_CLICK)
-const audioCorrect = new Audio(opt.AUDIO_CORRECT)
-const audioTitle = new Audio(opt.AUDIO_TITLE)
 
 let firstNum, secondNum, isChecked, leftCnt
 
@@ -50,7 +47,7 @@ const renderTitle = parent => {
   })
 
   $titleIcon.addEventListener('click', () => {
-    audioTitle.play()
+    audio.title.play()
   })
 
   createSVGElement({
@@ -316,9 +313,9 @@ const renderAnswerButtons = (parent, clickHandler) => {
 const buttonHandler = ({ target }) => {
   const myAnswer = +target.parentNode.dataset.value
 
-  if (isChecked[myAnswer]) return
+  if (Number.isNaN(myAnswer) || isChecked[myAnswer]) return
   if (firstNum + secondNum === myAnswer) {
-    audioCorrect.play()
+    audio.correct.play()
 
     const $squareText = document.querySelector('.square-text')
     $squareText.textContent = myAnswer
@@ -331,19 +328,38 @@ const buttonHandler = ({ target }) => {
         {
           text: opt.BTN_TEXT_RESTART,
           action() {
-            const firstNumCandidate = ~~(Math.random() * 8) + 1
-            const secondNumCandidate = secondNum === 1 ? 1 : ~~(Math.random() * (9 - firstNumCandidate)) + 1
+            audio.click.play()
+
+            if (availableNums.size === 0) {
+              if (secondNum === 1) {
+                for (let i = 1; i <= 8; i++) {
+                  availableNums.add(`${i}1`)
+                }
+              } else {
+                for (let i1 = 1; i1 <= 8; i1++) {
+                  for (let i2 = 1; i1 + i2 <= 9; i2++) {
+                    availableNums.add(`${i1}${i2}`)
+                  }
+                }
+              }
+              availableNums.delete(`${firstNum}${secondNum}`)
+            }
+            
+            const selected = Array.from(availableNums)[~~(Math.random() * availableNums.size)]
+            availableNums.delete(selected)
 
             hideModal()
-            render(firstNumCandidate, secondNumCandidate)
+            render(...[...selected].map(n => +n))
+            console.log(availableNums)
           }
         }
       ]
     })
   } else {
-    audioClick.play()
+    audio.click.play()
 
     leftCnt--
+    console.log(target.parentNode.dataset)
     document.getElementsByClassName('number-btn-outer')[myAnswer].classList.add('incorrected')
     document.getElementsByClassName('incorrect-counter')[2 - leftCnt].classList.add('incorrected')
     isChecked[myAnswer] = true
@@ -356,11 +372,29 @@ const buttonHandler = ({ target }) => {
           {
             text: opt.BTN_TEXT_RESTART,
             action() {
-              const firstNumCandidate = ~~(Math.random() * 8) + 1
-              const secondNumCandidate = secondNum === 1 ? 1 : ~~(Math.random() * (9 - firstNumCandidate)) + 1
+              audio.click.play()
+
+              if (availableNums.size === 0) {
+                if (secondNum === 1) {
+                  for (let i = 1; i <= 8; i++) {
+                    availableNums.add(`${i}1`)
+                  }
+                } else {
+                  for (let i1 = 1; i1 <= 8; i1++) {
+                    for (let i2 = 1; i1 + i2 <= 9; i2++) {
+                      availableNums.add(`${i1}${i2}`)
+                    }
+                  }
+                }
+                availableNums.delete(`${firstNum}${secondNum}`)
+              }
+
+              const selected = Array.from(availableNums)[~~(Math.random() * availableNums.size)]
+              availableNums.delete(selected)
 
               hideModal()
-              render(firstNumCandidate, secondNumCandidate)
+              render(...[...selected].map(n => +n))
+              console.log(availableNums)
             }
           }
         ]
@@ -379,8 +413,18 @@ const renderIncorrectCounter = parent => {
     type: 'svg',
     parent,
     attributes: {
-      x: 680,
+      x: 600,
       y: 30
+    }
+  })
+
+  createSVGElement({
+    type: 'text',
+    parent: $incorrectCounterContainer,
+    text: '틀린 횟수',
+    attributes: {
+      x: 100,
+      y: 18
     }
   })
 

@@ -1,4 +1,5 @@
 import opt from './options.js'
+import { availableNums, audio } from './store.js'
 import { showModal, hideModal } from './modal.js'
 import { render } from './svg.js'
 
@@ -10,6 +11,8 @@ showModal({
     {
       text: opt.BTN_TEXT_CUSTOM,
       action(firstNum, secondNum) {
+        audio.click.play()
+
         const $introErrorMessage = document.querySelector('.intro-error-message')
 
         if (Number.isNaN(firstNum) || Number.isNaN(secondNum)) {
@@ -25,6 +28,13 @@ showModal({
           return
         }
 
+        for (let i1 = 1; i1 <= 8; i1++) {
+          for (let i2 = 1; i1 + i2 <= 9; i2++) {
+            availableNums.add(`${i1}${i2}`)
+          }
+        }
+        availableNums.delete(`${firstNum}${secondNum}`)
+
         hideModal()
         render(firstNum, secondNum)
       }
@@ -32,20 +42,33 @@ showModal({
     {
       text: opt.BTN_TEXT_RANDOM_1,
       action() {
-        const firstNum = ~~(Math.random() * 8) + 1
+        audio.click.play()
         
+        for (let i = 1; i <= 8; i++) {
+          availableNums.add(`${i}1`)
+        }
+        const selected = Array.from(availableNums)[~~(Math.random() * availableNums.size)]
+        availableNums.delete(selected)
+
         hideModal()
-        render(firstNum, 1)
+        render(...[...selected].map(n => +n))
       }
     },
     {
       text: opt.BTN_TEXT_RANDOM_N,
       action() {
-        const firstNum = ~~(Math.random() * 8) + 1
-        const secondNum = ~~(Math.random() * (9 - firstNum)) + 1
+        audio.click.play()
+
+        for (let i1 = 1; i1 <= 8; i1++) {
+          for (let i2 = 1; i1 + i2 <= 9; i2++) {
+            availableNums.add(`${i1}${i2}`)
+          }
+        }
+        const selected = Array.from(availableNums)[~~(Math.random() * availableNums.size)]
+        availableNums.delete(selected)
 
         hideModal()
-        render(firstNum, secondNum)
+        render(...[...selected].map(n => +n))
       }
     }
   ]
