@@ -5,6 +5,8 @@ import { showToast } from './toast.js'
 
 let firstNum, secondNum, isChecked, leftCnt
 
+const $container = document.getElementById('container')
+
 /**
  * SVG 요소를 생성 & 리턴
  */
@@ -19,6 +21,23 @@ const createSVGElement = ({ type = 'svg', parent, text = '', attributes }) => {
 
   parent.appendChild($el)
   return $el
+}
+
+/**
+ * SVG 컨테이너 렌더링
+ */
+const renderSVGContainer = () => {
+  return createSVGElement({
+    type: 'svg',
+    parent: $container,
+    attributes: {
+      // width: opt.SVG_WIDTH,
+      // height: opt.SVG_HEIGHT,
+      width: '100vw',
+      height: '100vh',
+      id: 'svg-container'
+    }
+  })
 }
 
 /**
@@ -66,15 +85,20 @@ const renderTitle = parent => {
  * 문제 이미지 렌더링
  */
 const renderQuestionImage = (parent, firstNum, secondNum) => {
+  const vw = window.innerWidth
+  const vh = window.innerHeight
+
   const $questionImageContainer = createSVGElement({
     type: 'svg',
     parent,
     attributes: {
-      x: 340 - 18 * (firstNum + secondNum - 2),
-      y: 20,
+      // x: `calc(50% - ${72}px)`,
+      x: `${42 - (firstNum + secondNum - 2) * 2.5}%`,
+      // y: '15%',
       width: '50%',
       height: '50%',
-      viewBox: '0 0 230 40'
+      viewBox: '0 0 220 20'
+      // viewBox: `${-(firstNum + secondNum + 9) * 16} ${-vh / 8} ${vw / 2} ${vh / 2}`
     }
   })
 
@@ -214,10 +238,11 @@ const renderToast = parent => {
     type: 'svg',
     parent,
     attributes: {
-      x: 30,
-      y: 450,
-      width: 250,
-      height: 40,
+      x: '33%',
+      y: '75%',
+      width: '34%',
+      height: '34%',
+      viewBox: '0 0 320 40',
       class: 'incorrect-toast'
     }
   })
@@ -229,7 +254,7 @@ const renderToast = parent => {
       x: 0,
       y: 0,
       rx: 4,
-      width: 250,
+      width: 320,
       height: 40,
       fill: 'crimson'
     }
@@ -240,10 +265,11 @@ const renderToast = parent => {
     parent: $incorrectToast,
     text: opt.MSG_INCORRECT_TOAST,
     attributes: {
+      x: '26%',
       fill: 'white',
       'font-weight': 'bold',
       'alignment-baseline': 'middle',
-      transform: 'translate(18, 22)'
+      transform: 'translate(0, 22)'
     }
   })
 }
@@ -256,8 +282,11 @@ const renderAnswerButtons = (parent, clickHandler) => {
     type: 'svg',
     parent,
     attributes: {
-      x: '20%',
-      y: '75%'
+      x: '25%',
+      y: '50%',
+      width: '50%',
+      height: '50%',
+      viewBox: '0, 0, 480, 38'
     }
   })
 
@@ -413,7 +442,7 @@ const renderIncorrectCounter = parent => {
     type: 'svg',
     parent,
     attributes: {
-      x: 600,
+      x: 'calc(100% - 200px)',
       y: 30
     }
   })
@@ -457,15 +486,7 @@ export const render = (firstNumCandidate, secondNumCandidate) => {
   isChecked = Array(10).fill(false)
   leftCnt = opt.MAX_LEFT_CNT
 
-  $svgContainer = createSVGElement({
-    type: 'svg',
-    parent: document.getElementById('container'),
-    attributes: {
-      width: opt.SVG_WIDTH,
-      height: opt.SVG_HEIGHT,
-      id: 'svg-container'
-    }
-  })
+  $svgContainer = renderSVGContainer()
 
   renderTitle($svgContainer)
   renderQuestionImage($svgContainer, firstNum, secondNum)
