@@ -1,9 +1,8 @@
 import opt from './options.js'
 import { audio, availableNums } from './store.js'
 import { showModal, hideModal } from './modal.js'
-import { showToast } from './toast.js'
 
-let firstNum, secondNum, isChecked, leftCnt
+let firstNum, secondNum, isChecked, leftCnt, toastTimeoutId
 
 const $container = document.getElementById('container')
 
@@ -466,6 +465,17 @@ const renderIncorrectCounter = parent => {
       }
     })
   }
+}
+
+/**
+ * SVG 토스트 메시지 띄우기
+ */
+export const showToast = () => {
+  document.querySelector('.incorrect-toast').classList.add('visible')
+  toastTimeoutId = setTimeout(() => {
+    document.querySelector('.incorrect-toast').classList.remove('visible')
+    clearTimeout(toastTimeoutId)
+  }, opt.TOAST_TIME)
 }
 
 /**
