@@ -2,6 +2,10 @@ import opt from './options.js'
 import { showModal, hideModal } from './modal.js'
 import { showToast } from './toast.js'
 
+const audioClick = new Audio(opt.AUDIO_CLICK)
+const audioCorrect = new Audio(opt.AUDIO_CORRECT)
+const audioTitle = new Audio(opt.AUDIO_TITLE)
+
 let firstNum, secondNum, isChecked, leftCnt
 
 /**
@@ -24,12 +28,37 @@ const createSVGElement = ({ type = 'svg', parent, text = '', attributes }) => {
  * 우측 상단 타이틀 렌더링
  */
 const renderTitle = parent => {
-  createSVGElement({
-    type: 'text',
+  const $titleContainer = createSVGElement({
+    type: 'svg',
     parent,
-    text: opt.MSG_TITLE,
+    attributes: {
+      x: 0,
+      y: 0
+    }
+  })
+
+  const $titleIcon = createSVGElement({
+    type: 'text',
+    parent: $titleContainer,
+    text: opt.MSG_TITLE_ICON,
     attributes: {
       x: 30,
+      y: 50,
+      'font-size': '1.25rem',
+      class: 'title-icon'
+    }
+  })
+
+  $titleIcon.addEventListener('click', () => {
+    audioTitle.play()
+  })
+
+  createSVGElement({
+    type: 'text',
+    parent: $titleContainer,
+    text: opt.MSG_TITLE_TEXT,
+    attributes: {
+      x: 60,
       y: 50,
       'font-size': '1.25rem'
     }
@@ -289,6 +318,8 @@ const buttonHandler = ({ target }) => {
 
   if (isChecked[myAnswer]) return
   if (firstNum + secondNum === myAnswer) {
+    audioCorrect.play()
+
     const $squareText = document.querySelector('.square-text')
     $squareText.textContent = myAnswer
     $squareText.classList.add('corrected')
@@ -310,6 +341,8 @@ const buttonHandler = ({ target }) => {
       ]
     })
   } else {
+    audioClick.play()
+
     leftCnt--
     document.getElementsByClassName('number-btn-outer')[myAnswer].classList.add('incorrected')
     document.getElementsByClassName('incorrect-counter')[2 - leftCnt].classList.add('incorrected')

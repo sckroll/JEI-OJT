@@ -39,7 +39,7 @@ showModal({
       }
     },
     {
-      text: opt.BTN_TEXT_RANDOM_2,
+      text: opt.BTN_TEXT_RANDOM_N,
       action() {
         const firstNum = ~~(Math.random() * 8) + 1
         const secondNum = ~~(Math.random() * (9 - firstNum)) + 1

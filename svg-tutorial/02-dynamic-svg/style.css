@@ -114,3 +114,6 @@ input {
 .incorrect-counter.incorrected {
   fill: lightcoral;
 }
+.title-icon {
+  cursor: pointer;
+}
