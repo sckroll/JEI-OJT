@@ -68,8 +68,8 @@ const renderTitle = parent => {
 /**
  * 문제 이미지 렌더링
  */
-const renderProblemImage = (parent, firstNum, secondNum) => {
-  const $problemImageContainer = createSVGElement({
+const renderQuestionImage = (parent, firstNum, secondNum) => {
+  const $questionImageContainer = createSVGElement({
     type: 'svg',
     parent,
     attributes: {
@@ -83,7 +83,7 @@ const renderProblemImage = (parent, firstNum, secondNum) => {
 
   createSVGElement({
     type: 'rect',
-    parent: $problemImageContainer,
+    parent: $questionImageContainer,
     attributes: {
       x: 10,
       y: 20,
@@ -98,7 +98,7 @@ const renderProblemImage = (parent, firstNum, secondNum) => {
   for (let i = 0; i < firstNum; i++) {
     createSVGElement({
       type: 'circle',
-      parent: $problemImageContainer,
+      parent: $questionImageContainer,
       attributes: {
         cx: 20 * (i + 1),
         cy: 30,
@@ -110,7 +110,7 @@ const renderProblemImage = (parent, firstNum, secondNum) => {
 
   createSVGElement({
     type: 'rect',
-    parent: $problemImageContainer,
+    parent: $questionImageContainer,
     attributes: {
       x: 20 * (firstNum + 1),
       y: 20,
@@ -125,7 +125,7 @@ const renderProblemImage = (parent, firstNum, secondNum) => {
   for (let i = 0; i < secondNum; i++) {
     createSVGElement({
       type: 'circle',
-      parent: $problemImageContainer,
+      parent: $questionImageContainer,
       attributes: {
         cx: 20 * (firstNum + 1.5 + i),
         cy: 30,
@@ -137,7 +137,7 @@ const renderProblemImage = (parent, firstNum, secondNum) => {
 
   createSVGElement({
     type: 'path',
-    parent: $problemImageContainer,
+    parent: $questionImageContainer,
     attributes: {
       d: `M ${20 * firstNum} 20 c 0 -15, 30 -15, 30 0`,
       fill: 'transparent',
@@ -149,8 +149,8 @@ const renderProblemImage = (parent, firstNum, secondNum) => {
 /**
  * 문제 텍스트 렌더링
  */
-const renderProblemText = (parent, firstNum, secondNum) => {
-  const $problemTextContainer = createSVGElement({
+const renderQuestionText = (parent, firstNum, secondNum) => {
+  const $questionTextContainer = createSVGElement({
     type: 'svg',
     parent,
     attributes: {
@@ -164,7 +164,7 @@ const renderProblemText = (parent, firstNum, secondNum) => {
 
   createSVGElement({
     type: 'text',
-    parent: $problemTextContainer,
+    parent: $questionTextContainer,
     text: `${firstNum} + ${secondNum} =`,
     attributes: {
       x: 0,
@@ -174,7 +174,7 @@ const renderProblemText = (parent, firstNum, secondNum) => {
 
   const $squareGroup = createSVGElement({
     type: 'svg',
-    parent: $problemTextContainer,
+    parent: $questionTextContainer,
     attributes: {
       x: 50,
       y: 3
@@ -424,8 +424,8 @@ export const render = (firstNumCandidate, secondNumCandidate) => {
   })
 
   renderTitle($svgContainer)
-  renderProblemImage($svgContainer, firstNum, secondNum)
-  renderProblemText($svgContainer, firstNum, secondNum)
+  renderQuestionImage($svgContainer, firstNum, secondNum)
+  renderQuestionText($svgContainer, firstNum, secondNum)
   renderToast($svgContainer)
   renderAnswerButtons($svgContainer, buttonHandler)
   renderIncorrectCounter($svgContainer)
