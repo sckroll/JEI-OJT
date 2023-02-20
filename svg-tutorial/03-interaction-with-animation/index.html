@@ -14,7 +14,7 @@
       <path
         d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
         stroke="pink"
-        stroke-width="10"
+        stroke-width="6"
         stroke-linecap="round"
         fill="transparent"
         class="circle-outer-1"
@@ -24,16 +24,16 @@
         stroke="pink"
         stroke-width="2"
         stroke-linecap="round"
-        stroke-dasharray="10"
+        stroke-dasharray="5"
         fill="transparent"
       />
     </svg>
     <!-- Animation with interaction -->
-    <svg x="400" width="400" height="400" viewBox="0 0 120 120">
+    <svg id="interaction-container" x="400" width="400" height="400" viewBox="0 0 120 120">
       <path
         d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
         stroke="pink"
-        stroke-width="10"
+        stroke-width="6"
         stroke-linecap="round"
         fill="transparent"
         class="circle-outer-2"
@@ -43,8 +43,18 @@
         stroke="pink"
         stroke-width="2"
         stroke-linecap="round"
-        stroke-dasharray="10"
+        stroke-dasharray="5"
         fill="transparent"
+      />
+      <circle
+        cx="60"
+        cy="5"
+        r="4"
+        stroke="pink"
+        stroke-width="2"
+        fill="white"
+        class="circle-indicator"
+        transform="rotate(0 60 60)"
       />
     </svg>
   </svg>
