@@ -18,11 +18,28 @@
         <circle cx="16" cy="16" r="16" class="btn-background" />
         <path d="M 12, 7 h 8 v 2 h 4 v 4 h -16 v -4 h 4 m -2 4 v 12 h 12 v -12" class="btn-foreground" />
       </svg>
+      <svg id="btn-color" viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="16" class="btn-color" />
+      </svg>
+      <svg id="btn-width" viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="16" class="btn-background-line" />
+        <path d="M 16, 4 v 24" class="btn-foreground-line" />
+      </svg>
     </defs>
     <text x="32" y="54" font-size="20" fill="lightgrey" class="drag-safe">메모장</text>
     <svg id="memo-container"></svg>
-    <use href="#btn-undo" class="btn-undo" x="calc(100% - 112px)" y="calc(100% - 64px)" width="32" height="32" />
-    <use href="#btn-clear" class="btn-clear" x="calc(100% - 64px)" y="calc(100% - 64px)" width="32" height="32" />
+    <g class="btn-group">
+      <use href="#btn-width" class="btn-width 1" x="calc(100% - 496px)" y="calc(100% - 64px)" width="32" height="32" stroke-width="1" />
+      <use href="#btn-width" class="btn-width 2" x="calc(100% - 448px)" y="calc(100% - 64px)" width="32" height="32" stroke-width="2" />
+      <use href="#btn-width" class="btn-width 4" x="calc(100% - 400px)" y="calc(100% - 64px)" width="32" height="32" stroke-width="4" />
+      <use href="#btn-width" class="btn-width 8" x="calc(100% - 352px)" y="calc(100% - 64px)" width="32" height="32" stroke-width="8" />
+      <use href="#btn-color" class="btn-color red" x="calc(100% - 304px)" y="calc(100% - 64px)" width="32" height="32" fill="red" />
+      <use href="#btn-color" class="btn-color blue" x="calc(100% - 256px)" y="calc(100% - 64px)" width="32" height="32" fill="blue" />
+      <use href="#btn-color" class="btn-color green" x="calc(100% - 208px)" y="calc(100% - 64px)" width="32" height="32" fill="green" />
+      <use href="#btn-color" class="btn-color black" x="calc(100% - 160px)" y="calc(100% - 64px)" width="32" height="32" fill="black" />
+      <use href="#btn-undo" class="btn-undo" x="calc(100% - 112px)" y="calc(100% - 64px)" width="32" height="32" />
+      <use href="#btn-clear" class="btn-clear" x="calc(100% - 64px)" y="calc(100% - 64px)" width="32" height="32" />
+    </g>
   </svg>
   <script src="index.js" type="module"></script>
 </body>

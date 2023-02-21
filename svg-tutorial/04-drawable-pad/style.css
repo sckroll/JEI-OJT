@@ -28,12 +28,20 @@ svg text {
   stroke-linecap: round;
   fill: transparent;
 }
+.btn-background-line {
+  fill: aliceblue;
+}
+.btn-foreground-line {
+  stroke: black;
+  fill: transparent;
+}
 .btn-undo,
-.btn-clear {
+.btn-clear,
+.btn-color {
   cursor: pointer;
 }
 .path-line {
-  stroke: black;
-  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: transparent;
 }
