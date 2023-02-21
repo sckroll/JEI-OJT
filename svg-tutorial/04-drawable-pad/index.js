@@ -6,6 +6,8 @@ const $memoContainer = document.getElementById('memo-container')
 const $btnUndo = document.querySelector('.btn-undo')
 const $btnClear = document.querySelector('.btn-clear')
 const $btnGroup = document.querySelector('.btn-group')
+const $widthSelected = document.querySelector('.width-selected')
+const $colorSelected = document.querySelector('.color-selected')
 
 /**
  * SVG 좌표계로 변환
@@ -73,7 +75,17 @@ $btnGroup.addEventListener('click', e => {
     }
   } else if (btnType === 'btn-color') {
     pathColor = e.target.classList[1] || 'black'
+
+    if (pathColor === 'red') $colorSelected.setAttributeNS(null, 'cx', 'calc(100% - 304px + 16px)')
+    else if (pathColor === 'blue') $colorSelected.setAttributeNS(null, 'cx', 'calc(100% - 256px + 16px)')
+    else if (pathColor === 'green') $colorSelected.setAttributeNS(null, 'cx', 'calc(100% - 208px + 16px)')
+    else $colorSelected.setAttributeNS(null, 'cx', 'calc(100% - 160px + 16px)')
   } else if (btnType === 'btn-width') {
     pathWidth = e.target.classList[1] || '2'
+
+    if (pathWidth === '1') $widthSelected.setAttributeNS(null, 'cx', 'calc(100% - 496px + 16px)')
+    else if (pathWidth === '4') $widthSelected.setAttributeNS(null, 'cx', 'calc(100% - 400px + 16px)')
+    else if (pathWidth === '8') $widthSelected.setAttributeNS(null, 'cx', 'calc(100% - 352px + 16px)')
+    else $widthSelected.setAttributeNS(null, 'cx', 'calc(100% - 448px + 16px)')
   }
 })

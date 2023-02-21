@@ -37,11 +37,27 @@ svg text {
 }
 .btn-undo,
 .btn-clear,
-.btn-color {
+.btn-color,
+.btn-width {
   cursor: pointer;
 }
 .path-line {
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: transparent;
+}
+.width-selected,
+.color-selected {
+  cursor: pointer;
+  stroke-width: 2;
+  fill: transparent;
+  animation: blink 0.5s linear infinite alternate;
+}
+@keyframes blink {
+  0% {
+    stroke: black;
+  }
+  100% {
+    stroke: white;
+  }
 }
