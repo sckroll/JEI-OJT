@@ -15,6 +15,7 @@ body {
   stroke-linecap: round;
   fill: transparent;
 }
+.circle-outer-1.success,
 .circle-outer-2.success {
   transition: all 0.15s;
   stroke: purple;
@@ -27,16 +28,18 @@ body {
   stroke-dasharray: 5;
   fill: transparent;
 }
-.circle-indicator {
-  cursor: pointer;
-  stroke: pink;
-  stroke-width: 2;
-  fill: white;
-}
-.circle-indicator.success {
-  transition: all 0.15s;
-  stroke: purple;
-}
 .speaker {
+  cursor: pointer;
+}
+.arrow-outer {
+  fill: pink;
+}
+.arrow {
+  stroke: white;
+  stroke-width: 4;
+  stroke-linecap: round;
+  fill: transparent;
+}
+.circle-indicator {
   cursor: pointer;
 }

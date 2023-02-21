@@ -39,6 +39,7 @@ const drawCircle = timestamp => {
     animationId = requestAnimationFrame(drawCircle)
   } else {
     cancelAnimationFrame(animationId)
+    $circleOuter1.classList.add('success')
     startTime = null
   }
 }
@@ -85,7 +86,7 @@ window.addEventListener('pointermove', e => {
     isFinished = true
 
     $circleOuter2.classList.add('success')
-    $circleIndicator.classList.add('success')
+    $circleIndicator.remove()
     successSound.play()
   }
 })
