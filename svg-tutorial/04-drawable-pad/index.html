@@ -8,7 +8,7 @@
   <title>Drawable pad</title>
 </head>
 <body>
-  <svg id="svg-container">
+  <svg id="svg-container" class="drag-safe">
     <defs>
       <svg id="btn-undo" viewBox="0 0 32 32">
         <circle cx="16" cy="16" r="16" class="btn-background" />
@@ -19,7 +19,8 @@
         <path d="M 12, 7 h 8 v 2 h 4 v 4 h -16 v -4 h 4 m -2 4 v 12 h 12 v -12" class="btn-foreground" />
       </svg>
     </defs>
-    <text x="32" y="54" font-size="20" fill="lightgrey">메모장</text>
+    <text x="32" y="54" font-size="20" fill="lightgrey" class="drag-safe">메모장</text>
+    <svg id="memo-container"></svg>
     <use href="#btn-undo" class="btn-undo" x="calc(100% - 112px)" y="calc(100% - 64px)" width="32" height="32" />
     <use href="#btn-clear" class="btn-clear" x="calc(100% - 64px)" y="calc(100% - 64px)" width="32" height="32" />
   </svg>
