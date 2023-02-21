@@ -39,6 +39,7 @@ const drawCircle = timestamp => {
     animationId = requestAnimationFrame(drawCircle)
   } else {
     cancelAnimationFrame(animationId)
+    $circleOuter1.setAttribute('stroke-dashoffset', 0)
     $circleOuter1.classList.add('success')
     startTime = null
   }
