@@ -9,50 +9,34 @@
 </head>
 <body>
   <svg id="svg-container">
+    <!-- Title -->
+    <text x="40" y="60" font-size="24" class="speaker">🔈</text>
+    <text x="72" y="60" font-size="24" class="title">점선을 따라 동그라미를 그리세요.</text>
     <!-- Animation Only -->
-    <svg width="400" height="400" viewBox="0 0 120 120">
+    <svg x="40" y="100" width="400" height="400" viewBox="0 0 120 120">
       <path
-        d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
-        stroke="pink"
-        stroke-width="6"
-        stroke-linecap="round"
-        fill="transparent"
-        class="circle-outer-1"
+      d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
+      class="circle-inner-1"
       />
       <path
         d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
-        stroke="pink"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-dasharray="5"
-        fill="transparent"
+        class="circle-outer-1"
       />
     </svg>
     <!-- Animation with interaction -->
-    <svg id="interaction-container" x="400" width="400" height="400" viewBox="0 0 120 120">
+    <svg id="interaction-container" x="440" y="100" width="400" height="400" viewBox="0 0 120 120">
       <path
-        d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
-        stroke="pink"
-        stroke-width="6"
-        stroke-linecap="round"
-        fill="transparent"
-        class="circle-outer-2"
+      d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
+      class="circle-inner-2"
       />
       <path
         d="M 60, 5 a 50, 50 0 1, 0 0, 110 a 50, 50 0 1, 0 0, -110"
-        stroke="pink"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-dasharray="5"
-        fill="transparent"
+        class="circle-outer-2"
       />
       <circle
         cx="60"
         cy="5"
         r="4"
-        stroke="pink"
-        stroke-width="2"
-        fill="white"
         class="circle-indicator"
         transform="rotate(0 60 60)"
       />
