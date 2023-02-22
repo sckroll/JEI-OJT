@@ -1,10 +1,10 @@
 const BUTTON_GAP = 40, BUTTON_MARGIN = 64, BUTTON_SIZE = 32
 
-const colors = ['red', 'blue', 'green', 'black']
-const widths = [1, 2, 4, 8]
+const colors = ['red', 'yellow', 'blue', 'green', 'purple', 'lightgrey', 'black']
+const widths = [1, 2, 4, 6, 8]
 
 let isDragging = false, $currPath = null, currMargin = BUTTON_MARGIN
-let pathColor = colors[3], pathWidth = widths[1]
+let pathColor = colors[colors.length - 1], pathWidth = widths[1]
 
 const $svgContainer = document.getElementById('svg-container')
 const $memoContainer = document.getElementById('memo-container')
