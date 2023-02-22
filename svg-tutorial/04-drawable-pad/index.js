@@ -23,9 +23,10 @@ const convertToSVGCoord = (x, y, $el) => {
 /**
  * 선 그리기
  */
-$svgContainer.addEventListener('pointerdown', ({ clientX, clientY, target }) => {
+$svgContainer.addEventListener('pointerdown', ({ clientX, clientY, target, button }) => {
   // 버튼 위에서 드래그할 경우 버튼이 눌리지 않는 현상 방지
-  if(!target.classList.contains('drag-safe')) return
+  // 마우스 왼쪽 버튼만 허용
+  if (!target.classList.contains('drag-safe') || button !== 0) return
   if (!isDragging) isDragging = true
 
   const { x, y } = convertToSVGCoord(clientX, clientY, $memoContainer)
@@ -38,13 +39,14 @@ $svgContainer.addEventListener('pointerdown', ({ clientX, clientY, target }) => 
 
 })
 $svgContainer.addEventListener('pointerup', ({ target }) => {
-  // 버튼 위에서 드래그할 경우 버튼이 눌리지 않는 현상 방지
-  if (!target.classList.contains('drag-safe')) return
   if (isDragging) isDragging = false
 
-  // 점만 찍고 이동하지 않은 경우 해당 패스 삭제
+  // 버튼 위에서 드래그할 경우 버튼이 눌리지 않는 현상 방지
+  if (!target.classList.contains('drag-safe')) return
+
+  // 점만 찍을 경우
   const prevPath = $currPath.getAttributeNS(null, 'd')
-  if (!prevPath.includes('L')) $currPath.remove()
+  if (!prevPath.includes('L')) $currPath.setAttributeNS(null, 'd', prevPath + 'l 0, 1')
 })
 $svgContainer.addEventListener('pointermove', ({ clientX, clientY }) => {;
   if (!isDragging) return
@@ -58,8 +60,8 @@ $svgContainer.addEventListener('pointermove', ({ clientX, clientY }) => {;
 // 뷰포트 밖에서 클릭 & 드래그를 멈추고 다시 뷰포트 안으로 들어오면 그리기 중지
 $svgContainer.addEventListener('pointerleave', () => {
   if (isDragging) isDragging = false
-  console.log('asdf')
 })
+
 
 /**
  * 버튼 핸들링
