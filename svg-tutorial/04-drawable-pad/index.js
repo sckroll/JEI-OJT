@@ -2,6 +2,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg'
 
 let isDragging = false, $currPath = null, pathColor = 'black', pathWidth = '2'
 
+const $svgContainer = document.getElementById('svg-container')
 const $memoContainer = document.getElementById('memo-container')
 const $btnUndo = document.querySelector('.btn-undo')
 const $btnClear = document.querySelector('.btn-clear')
@@ -22,7 +23,7 @@ const convertToSVGCoord = (x, y, $el) => {
 /**
  * 선 그리기
  */
-window.addEventListener('pointerdown', ({ clientX, clientY, target }) => {
+$svgContainer.addEventListener('pointerdown', ({ clientX, clientY, target }) => {
   // 버튼 위에서 드래그할 경우 버튼이 눌리지 않는 현상 방지
   if(!target.classList.contains('drag-safe')) return
   if (!isDragging) isDragging = true
@@ -36,7 +37,7 @@ window.addEventListener('pointerdown', ({ clientX, clientY, target }) => {
   $memoContainer.appendChild($currPath)
 
 })
-window.addEventListener('pointerup', ({ target }) => {
+$svgContainer.addEventListener('pointerup', ({ target }) => {
   // 버튼 위에서 드래그할 경우 버튼이 눌리지 않는 현상 방지
   if (!target.classList.contains('drag-safe')) return
   if (isDragging) isDragging = false
@@ -45,7 +46,7 @@ window.addEventListener('pointerup', ({ target }) => {
   const prevPath = $currPath.getAttributeNS(null, 'd')
   if (!prevPath.includes('L')) $currPath.remove()
 })
-window.addEventListener('pointermove', ({ clientX, clientY }) => {;
+$svgContainer.addEventListener('pointermove', ({ clientX, clientY }) => {;
   if (!isDragging) return
 
   const { x, y } = convertToSVGCoord(clientX, clientY, $memoContainer)
@@ -55,8 +56,9 @@ window.addEventListener('pointermove', ({ clientX, clientY }) => {;
   $currPath.setAttributeNS(null, 'd', prevPath + `L${Math.round(x)},${Math.round(y)}`)
 })
 // 뷰포트 밖에서 클릭 & 드래그를 멈추고 다시 뷰포트 안으로 들어오면 그리기 중지
-window.addEventListener('pointerleave', () => {
+$svgContainer.addEventListener('pointerleave', () => {
   if (isDragging) isDragging = false
+  console.log('asdf')
 })
 
 /**
