@@ -162,4 +162,24 @@ const playAnimation = timestamp => {
   animationId = requestAnimationFrame(playAnimation)
 }
 
+/**
+ * 스프라이트
+ */
+
+const drawSprite = () => {
+  const image = new Image()
+  image.src = 'images/coins.png'
+  image.addEventListener('load', () => {
+    ctx.drawImage(image, 10, 90, 120, 120, 0, 0, 120, 120)
+  })
+}
+
+const spriteAnimation = timestamp => {
+  let sx = 10, sy = 90
+  const spriteWidth = 120, spriteHeight = 120
+
+  
+}
+
 draw()
+drawSprite()
