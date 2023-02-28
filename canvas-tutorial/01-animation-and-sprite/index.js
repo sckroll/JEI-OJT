@@ -1,3 +1,4 @@
+const SPEED = 2
 let first = 3, second = 1, animationId = null, startTime = null
 
 /**
@@ -88,14 +89,13 @@ const drawTextArea = (text) => {
   ctx.stroke()
 }
 
-const draw = (time = 0) => {
-  let offsetY = 160, circleSize = 10, circleGap = 40
-  let offsetX = 360 - (first + second - 2) * circleSize * 2
-
-  const speed = time / 10
+const draw = (time = 0, speed = 1) => {
+  const offsetY = 160, circleSize = 10, circleGap = 40
+  const offsetX = 360 - (first + second - 2) * circleSize * 2
+  const maxDelta = 100
 
   // 색상을 서서히 변화시키도록 변화 과정 중간의 색을 리턴하는 함수
-  // (ctx.fillStyle에 색상 값을 할당하면 자동으로 hex 값으로 변환됨)
+  // (ctx.fillStyle에 색상 값을 할당하면 자동으로 hex 값으로 변환되는 점을 응용)
   const changeColor = (fromColor, toColor, percentage) => {
     let result = '#'
 
@@ -116,12 +116,12 @@ const draw = (time = 0) => {
   }
 
   for (let i = 0; i < first; i++) {
-    const delta = Math.min(100, Math.max(0, speed - i * 100))
+    const delta = Math.min(maxDelta, Math.max(0, (time * speed / 1000 - i) * maxDelta))
     drawCircle(offsetX + i * circleGap, offsetY, circleSize, 'crimson')
     drawCircle(offsetX + i * circleGap, offsetY + delta, circleSize + delta / 20, changeColor('crimson', 'green', delta))
   }
   for (let i = 0; i < second; i++) {
-    const delta = Math.min(100, Math.max(0, speed - (i + first) * 100))
+    const delta = Math.min(maxDelta, Math.max(0, (time * speed / 1000 - i - first) * maxDelta))
     drawCircle(offsetX + circleGap * (first + 1 + i), offsetY, circleSize, 'slateblue')
     drawCircle(offsetX + circleGap * (first + 1 + i), offsetY + delta, circleSize + delta / 20, changeColor('slateblue', 'green', delta))
   }
@@ -142,7 +142,7 @@ const draw = (time = 0) => {
   drawPath(`M ${offsetX + circleGap * (first + 1)} ${offsetY - circleSize * 2} h ${circleGap * (second - 1)} c ${rightOutlineCurve} h -${circleGap * (second - 1)} c ${leftOutlineCurve} Z`, lineColor)
   drawPath(`M ${offsetX + circleGap * (first - 1)} ${offsetY - circleSize * 2} c ${topOutlineCurve}`, lineColor)
 
-  drawTextArea(time === 0 ? '?' : Math.floor(time / 1000))
+  drawTextArea(time === 0 ? '?' : Math.floor(time * speed / 1000))
 }
 
 const playAnimation = timestamp => {
@@ -151,10 +151,10 @@ const playAnimation = timestamp => {
   
   if (!startTime) startTime = timestamp
   const elapsedTime = timestamp - startTime
+  
+  draw(elapsedTime, SPEED)
 
-  draw(elapsedTime)
-
-  if (elapsedTime > 1000 * (first + second)) {
+  if (elapsedTime > 1000 / SPEED * (first + second)) {
     cancelAnimationFrame(animationId)
     startTime = null
     return
