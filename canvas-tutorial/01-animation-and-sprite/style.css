@@ -6,7 +6,7 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-color: lightblue;
+  background-color: steelblue;
 }
 #container {
   display: flex;
@@ -21,6 +21,7 @@ canvas {
 }
 form {
   display: flex;
+  align-items: center;
   gap: 2rem;
   color: white;
   font-size: 1.5rem;
@@ -36,12 +37,13 @@ form {
   height: 2rem;
   text-align: center;
   font-size: 1.5rem;
-  border: 2px solid slateblue;
+  border: 2px solid navy;
   border-radius: 0.25rem;
   outline: none;
 }
 #submit {
   cursor: pointer;
+  height: 2rem;
   font-size: 1rem;
   padding: 0.5rem;
   border: none;
@@ -50,12 +52,7 @@ form {
   font-size: 1rem;
   transition: background 0.2s, font 0.2s;
 }
-#submit{
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 0.25rem;
-  background-color: slateblue;
+#submit:hover {
+  background-color: navy;
   color: white;
 }
