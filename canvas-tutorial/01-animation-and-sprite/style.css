@@ -41,7 +41,7 @@ form {
   border-radius: 0.25rem;
   outline: none;
 }
-#submit {
+input[type='button'] {
   cursor: pointer;
   height: 2rem;
   font-size: 1rem;
@@ -52,7 +52,7 @@ form {
   font-size: 1rem;
   transition: background 0.2s, font 0.2s;
 }
-#submit:hover {
+input[type='button']:hover {
   background-color: navy;
   color: white;
 }
