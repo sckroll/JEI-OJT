@@ -1,3 +1,5 @@
+import Sprite from "./sprite.js"
+
 const SPEED = 2
 let first = 3, second = 1, animationId = null, startTime = null
 
@@ -89,7 +91,7 @@ const drawTextArea = (text) => {
   ctx.stroke()
 }
 
-const draw = (time = 0, speed = 1) => {
+const drawFrame = (time = 0, speed = 1) => {
   const offsetY = 160, circleSize = 10, circleGap = 40
   const offsetX = 360 - (first + second - 2) * circleSize * 2
   const maxDelta = 100
@@ -152,7 +154,7 @@ const playAnimation = timestamp => {
   if (!startTime) startTime = timestamp
   const elapsedTime = timestamp - startTime
   
-  draw(elapsedTime, SPEED)
+  drawFrame(elapsedTime, SPEED)
 
   if (elapsedTime > 1000 / SPEED * (first + second)) {
     cancelAnimationFrame(animationId)
@@ -162,24 +164,45 @@ const playAnimation = timestamp => {
   animationId = requestAnimationFrame(playAnimation)
 }
 
-/**
- * 스프라이트
- */
+drawFrame()
 
-const drawSprite = () => {
-  const image = new Image()
-  image.src = 'images/coins.png'
-  image.addEventListener('load', () => {
-    ctx.drawImage(image, 10, 90, 120, 120, 0, 0, 120, 120)
-  })
-}
-
-const spriteAnimation = timestamp => {
-  let sx = 10, sy = 90
-  const spriteWidth = 120, spriteHeight = 120
-
-  
-}
-
-draw()
-drawSprite()
+const coin1 = new Sprite(ctx, {
+  src: 'images/coins.png',
+  sx: 140,
+  sy: 24,
+  sw: 62,
+  sh: 61,
+  dx: 0,
+  dy: 0,
+  maxCount: 10,
+  fps: 120
+})
+const coin2 = new Sprite(ctx, {
+  src: 'images/coins.png',
+  sx: 123,
+  sy: 101,
+  sw: 67,
+  sh: 67,
+  dx: 70,
+  dy: 0,
+  fps: 60
+})
+const coin3 = new Sprite(ctx, {
+  src: 'images/coins.png',
+  sx: 115,
+  sy: 186,
+  sw: 70,
+  sh: 70,
+  dx: 150,
+  dy: 0,
+})
+const coin4 = new Sprite(ctx, {
+  src: 'images/coins.png',
+  sx: 93,
+  sy: 362,
+  sw: 77,
+  sh: 77,
+  dx: 230,
+  dy: 0,
+  fps: 15
+})
