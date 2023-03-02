@@ -6,21 +6,22 @@ export default function Sprite(ctx, {
 }) {
   let nextSx = sx, count = 0, startTime = null
   
-  const init = () => {
+  this.init = () => {
     if (!dw) dw = sw
     if (!dh) dh = sh
 
     this.image = new Image()
-    
     this.image.src = src
     this.image.addEventListener('load', () => {
       ctx.drawImage(this.image, nextSx, sy, sw, sh, dx, dy, dw, dh)
     })
-
-    this.animationId = requestAnimationFrame(update)
+  }
+  
+  this.start = () => {
+    this.animationId = requestAnimationFrame(this.update)
   }
 
-  const update = timestamp => {
+  this.update = timestamp => {
     if (!startTime) startTime = timestamp
     if (timestamp - startTime >= 1000 / fps) {
       if (nextSx > dw * 6) {
@@ -40,12 +41,12 @@ export default function Sprite(ctx, {
       startTime = null
     }
 
-    this.animationId = requestAnimationFrame(update)
+    this.animationId = requestAnimationFrame(this.update)
   }
 
-  const stop = () => {
+  this.stop = () => {
     cancelAnimationFrame(this.animationId)
   }
 
-  init()
+  this.init()
 }

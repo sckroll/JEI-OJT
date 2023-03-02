@@ -36,6 +36,10 @@ $second.addEventListener('change', ({ target }) => {
 
 const $submit = document.getElementById('submit')
 $submit.addEventListener('click', () => {
+  coin1.stop(coin1.animationId)
+  coin2.stop(coin2.animationId)
+  coin3.stop(coin3.animationId)
+  coin4.stop(coin4.animationId)
   animationId = requestAnimationFrame(playAnimation)
 })
 
@@ -56,11 +60,6 @@ const ctx = $canvas.getContext('2d')
 
 //   ctx.stroke()
 //   ctx.closePath()
-// }
-
-// const drawWithDraw2D = path => {
-//   const newPath = new Path2D(path)
-//   ctx.stroke(newPath)
 // }
 
 const drawCircle = (x, y, r, fillColor = 'black') => {
@@ -166,6 +165,10 @@ const playAnimation = timestamp => {
 
 drawFrame()
 
+/**
+ * 스프라이트
+ */
+
 const coin1 = new Sprite(ctx, {
   src: 'images/coins.png',
   sx: 140,
@@ -177,6 +180,8 @@ const coin1 = new Sprite(ctx, {
   maxCount: 10,
   fps: 120
 })
+coin1.start()
+
 const coin2 = new Sprite(ctx, {
   src: 'images/coins.png',
   sx: 123,
@@ -187,6 +192,8 @@ const coin2 = new Sprite(ctx, {
   dy: 0,
   fps: 60
 })
+coin2.start()
+
 const coin3 = new Sprite(ctx, {
   src: 'images/coins.png',
   sx: 115,
@@ -196,6 +203,8 @@ const coin3 = new Sprite(ctx, {
   dx: 150,
   dy: 0,
 })
+coin3.start()
+
 const coin4 = new Sprite(ctx, {
   src: 'images/coins.png',
   sx: 93,
@@ -206,3 +215,4 @@ const coin4 = new Sprite(ctx, {
   dy: 0,
   fps: 15
 })
+coin4.start()
