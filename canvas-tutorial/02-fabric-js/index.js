@@ -113,12 +113,12 @@ for (let i = 0; i < 8; i++) {
     })
   }
 
-  // 충돌 시 도형 재배치
+  // 도형 일부가 뷰포트 밖으로 나가거나 다른 도형과 충돌할 경우 재배치
   let isCollided = false
+  const { left, top, width, height } = path.getBoundingRect()
+  if (left < 0 || top < 0 || left + width > canvas.width || top + height > canvas.height) isCollided = true
   canvas.forEachObject(obj => {
-    if (path.intersectsWithObject(obj)) {
-      isCollided = true
-    }
+    if (path.intersectsWithObject(obj)) isCollided = true
   })
   if (isCollided) {
     i--
