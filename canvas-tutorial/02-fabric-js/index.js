@@ -52,10 +52,13 @@ titleIcon.on('mousedown', () => {
  */
 
 const colors = ['red', 'blue', 'green', 'cyan', 'magenta', 'yellow', 'brown', 'purple']
+let hasTriangle = false
+
+// 
 const deg2Rad = deg => deg * Math.PI / 180
 
 for (let i = 0; i < 8; i++) {
-  const randomNumber = ~~(Math.random() * 4)
+  const randomNumber = (i === 7 && !hasTriangle) ? 0 : ~~(Math.random() * 4)
   let path = null
 
   if (randomNumber <= 1) {
@@ -64,8 +67,8 @@ for (let i = 0; i < 8; i++) {
     const y1 = ~~(Math.random() * (canvas.height - canvasMargin * 2)) + canvasMargin
     const x2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
     const y2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
-    const x3 = Math.cos(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 90) + 60)) * (~~(Math.random() * 100) + 50)
-    const y3 = Math.sin(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 90) + 60)) * (~~(Math.random() * 100) + 50)
+    const x3 = Math.cos(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 60) + 60)) * (~~(Math.random() * 100) + 50)
+    const y3 = Math.sin(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 60) + 60)) * (~~(Math.random() * 100) + 50)
 
     path = new fabric.Path(`M ${x1} ${y1} l ${x2} ${y2} l ${x3} ${y3}${randomNumber === 0 ? ' z' : ''}`, {
       fill: 'transparent',
@@ -121,6 +124,9 @@ for (let i = 0; i < 8; i++) {
     i--
     continue
   }
+
+  // 삼각형 존재 여부 갱신
+  if (randomNumber === 0) hasTriangle = true
 
   canvas.add(path)
   path.on('mousedown', ({ target }) => {
