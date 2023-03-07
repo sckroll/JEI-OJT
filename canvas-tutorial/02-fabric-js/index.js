@@ -1,5 +1,5 @@
 const TITLE_MSG = '삼각형을 찾아 고르세요.'
-const canvasMargin = 100
+const canvasMargin = 200
 
 let voice = null
 speechSynthesis.addEventListener('voiceschanged', () => {
@@ -52,18 +52,20 @@ titleIcon.on('mousedown', () => {
  */
 
 const colors = ['red', 'blue', 'green', 'cyan', 'magenta', 'yellow', 'brown', 'purple']
+const deg2Rad = deg => deg * Math.PI / 180
+
 for (let i = 0; i < 8; i++) {
   const randomNumber = ~~(Math.random() * 4)
   let path = null
 
   if (randomNumber <= 1) {
-    // 삼각형 & 패스
-    const x1 = ~~(Math.random() * (canvas.width - canvasMargin * 3)) + 100
-    const y1 = ~~(Math.random() * (canvas.height - canvasMargin * 3)) + 100
-    const x2 = ~~(Math.random() * 201) - 100
-    const y2 = ~~(Math.random() * 201) - 100
-    const x3 = ~~(Math.random() * 201) - 100
-    const y3 = ~~(Math.random() * 201) - 100
+    // 삼각형 (0) & 패스 (1)
+    const x1 = ~~(Math.random() * (canvas.width - canvasMargin * 2)) + canvasMargin
+    const y1 = ~~(Math.random() * (canvas.height - canvasMargin * 2)) + canvasMargin
+    const x2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+    const y2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+    const x3 = Math.cos(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 90) + 60)) * (~~(Math.random() * 100) + 50)
+    const y3 = Math.sin(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 90) + 60)) * (~~(Math.random() * 100) + 50)
 
     path = new fabric.Path(`M ${x1} ${y1} l ${x2} ${y2} l ${x3} ${y3}${randomNumber === 0 ? ' z' : ''}`, {
       fill: 'transparent',
@@ -73,15 +75,15 @@ for (let i = 0; i < 8; i++) {
       isTriangle: randomNumber === 0
     })
   } else if (randomNumber === 2) {
-    // 사각형
-    const x1 = ~~(Math.random() * (canvas.width - canvasMargin * 3)) + 100
-    const y1 = ~~(Math.random() * (canvas.height - canvasMargin * 3)) + 100
-    const x2 = ~~(Math.random() * 201) - 100
-    const y2 = ~~(Math.random() * 201) - 100
-    const x3 = ~~(Math.random() * 201) - 100
-    const y3 = ~~(Math.random() * 201) - 100
-    const x4 = ~~(Math.random() * 201) - 100
-    const y4 = ~~(Math.random() * 201) - 100
+    // 사각형 (2)
+    const x1 = ~~(Math.random() * (canvas.width - canvasMargin * 2)) + canvasMargin
+    const y1 = ~~(Math.random() * (canvas.height - canvasMargin * 2)) + canvasMargin
+    const x2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+    const y2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+    const x3 = Math.cos(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
+    const y3 = Math.sin(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
+    const x4 = Math.cos(Math.atan2(y3, x3) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
+    const y4 = Math.sin(Math.atan2(y3, x3) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
 
     path = new fabric.Path(`M ${x1} ${y1} l ${x2} ${y2} l ${x3} ${y3} l ${x4} ${y4} z`, {
       fill: 'transparent',
@@ -91,9 +93,9 @@ for (let i = 0; i < 8; i++) {
       isTriangle: false
     })
   } else if (randomNumber === 3) {
-    // 원
-    const left = ~~(Math.random() * (canvas.width - canvasMargin * 3)) + 100
-    const top = ~~(Math.random() * (canvas.height - canvasMargin * 3)) + 100
+    // 원 (3)
+    const left = ~~(Math.random() * (canvas.width - canvasMargin)) + 100
+    const top = ~~(Math.random() * (canvas.height - canvasMargin)) + 100
     const radius = ~~(Math.random() * 50) + 50
 
     path = new fabric.Circle({
