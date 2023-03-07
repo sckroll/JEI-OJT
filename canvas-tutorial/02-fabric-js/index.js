@@ -110,6 +110,18 @@ for (let i = 0; i < 8; i++) {
     })
   }
 
+  // 충돌 시 도형 재배치
+  let isCollided = false
+  canvas.forEachObject(obj => {
+    if (path.intersectsWithObject(obj)) {
+      isCollided = true
+    }
+  })
+  if (isCollided) {
+    i--
+    continue
+  }
+
   canvas.add(path)
   path.on('mousedown', ({ target }) => {
     console.log(target.isTriangle);
