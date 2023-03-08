@@ -1,9 +1,10 @@
 import { speakText, deg2Rad } from './utils.js'
 
 const TITLE_QUESTION_1 = '삼각형을 찾아 고르세요.'
+const TITLE_QUESTION_2 = '삼각형을 모두 찾아 고르세요.'
 const TITLE_MODAL_INCORRECT = '조금 아쉬워요!'
 const TITLE_MODAL_CORRECT = '와우! 잘했어요!'
-const MSG_MODAL_INCORRECT = '다시 할래요!'
+const MSG_MODAL_BUTTON = '다시 할래요!'
 
 const SRC_CLICK_SOUND = './mp3/MP_Blop.mp3'
 const SRC_CORRECT_SOUND = './mp3/MP_스테이지 클리어 (레트로).mp3'
@@ -13,7 +14,7 @@ const CANVAS_MARGIN = 200
 const TOTAL_LEVEL = 2
 const MAX_INCORRECT_COUNT = 3
 
-let currLevel = 0, incorrectCount = 0, timeoutId = null
+let currLevel = 0, tooltipTimeoutId = null, levelSwitchTimeoutId = null
 const clickSound = new Audio(SRC_CLICK_SOUND)
 const correctSound = new Audio(SRC_CORRECT_SOUND)
 correctSound.volume = 0.4
@@ -184,7 +185,7 @@ const renderTooltip = (canvas, top, left, isCorrected) => {
     width: 48,
     height: 48,
     rx: 8,
-    fill: 'green',
+    fill: isCorrected ? 'green' : 'crimson',
     originX: 'center',
     originY: 'center'
   })
@@ -221,7 +222,7 @@ const renderTooltip = (canvas, top, left, isCorrected) => {
     },
     duration: 150
   })
-  timeoutId = setTimeout(() => {
+  tooltipTimeoutId = setTimeout(() => {
     tooltip.animate('opacity', 0, {
       onChange() {
         canvas.renderAll()
@@ -231,7 +232,7 @@ const renderTooltip = (canvas, top, left, isCorrected) => {
       },
       duration: 150
     })
-    clearTimeout(timeoutId)
+    clearTimeout(tooltipTimeoutId)
   }, 500)
 }
 
@@ -306,6 +307,8 @@ const renderModal = (canvas, titleText, buttonText, onClick) => {
       duration: 100
     })
   })
+
+  return modalGroup
 }
 
 /**
@@ -317,32 +320,94 @@ const initCanvas = () => {
     hoverCursor: 'pointer'
   })
 
-  renderTitle(canvas, TITLE_QUESTION_1)
   const levelIndicatorGroup = renderLevelIndicator(canvas)
-  const shapes = renderRandomShape(canvas, 8)
+  let title = null, shapes = null, modal = null
 
-  for (const shape of shapes) {
-    shape.on('mousedown', ({ target }) => {
-      const { left, top, width } = target.getBoundingRect()
-
-      if (target.isTriangle) {
-        levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
-        correctSound.play()
-        incorrectCount = 0
-      } else {
-        clickSound.play()
-        incorrectCount++
+  const renderSuccessModal = () => {
+    speakText(TITLE_MODAL_CORRECT)
+    modal = renderModal(canvas, TITLE_MODAL_CORRECT, MSG_MODAL_BUTTON, () => {
+      currLevel = 0
+      for (let i = 0; i < TOTAL_LEVEL; i++) {
+        levelIndicatorGroup.item(i).set({ fill: 'transparent' })
       }
-      renderTooltip(canvas, top - 48, left + width, target.isTriangle)
 
-      if (incorrectCount === MAX_INCORRECT_COUNT) {
-        speakText(TITLE_MODAL_INCORRECT)
-        renderModal(canvas, TITLE_MODAL_INCORRECT, MSG_MODAL_INCORRECT, () => {
-          console.log('asdf')
-        })
-      }
+      canvas.remove(title, modal, ...shapes)
+      renderLevel1(renderLevel2, renderFailureModal)
     })
   }
+  const renderFailureModal = () => {
+    speakText(TITLE_MODAL_INCORRECT)
+    modal = renderModal(canvas, TITLE_MODAL_INCORRECT, MSG_MODAL_BUTTON, () => {
+      currLevel = 0
+      for (let i = 0; i < TOTAL_LEVEL; i++) {
+        levelIndicatorGroup.item(i).set({ fill: 'transparent' })
+      }
+
+      canvas.remove(title, modal, ...shapes)
+      renderLevel1(renderLevel2, renderFailureModal)
+    })
+  }
+
+  const renderLevel1 = (onSuccess, onFailure) => {
+    let incorrectCount = 0
+    title = renderTitle(canvas, TITLE_QUESTION_1)
+    shapes = renderRandomShape(canvas, 8)
+
+    for (const shape of shapes) {
+      shape.on('mousedown', ({ target }) => {
+        const { left, top, width } = target.getBoundingRect()
+  
+        if (target.isTriangle) {
+          levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
+          correctSound.play()
+          levelSwitchTimeoutId = setTimeout(() => {
+            canvas.remove(title, ...shapes)
+            onSuccess(renderSuccessModal, onFailure)
+            clearTimeout(levelSwitchTimeoutId)
+          }, 1000)
+        } else {
+          clickSound.play()
+          incorrectCount++
+        }
+        renderTooltip(canvas, top - 48, left + width, target.isTriangle)
+
+        if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
+      })
+    }
+  }
+  const renderLevel2 = (onSuccess, onFailure) => {
+    const totalTriangleCount = 5
+    let correctCount = 0, incorrectCount = 0
+
+    title = renderTitle(canvas, TITLE_QUESTION_2)
+    shapes = renderRandomShape(canvas, 8, totalTriangleCount)
+
+    for (const shape of shapes) {
+      shape.on('mousedown', ({ target }) => {
+        const { left, top, width } = target.getBoundingRect()
+
+        if (target.isTriangle) {
+          correctSound.play()
+          correctCount++
+        } else {
+          clickSound.play()
+          incorrectCount++
+        }
+        renderTooltip(canvas, top - 48, left + width, target.isTriangle)
+        
+        if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
+        if (correctCount === totalTriangleCount) {
+          levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
+          levelSwitchTimeoutId = setTimeout(() => {
+            onSuccess()
+            clearTimeout(levelSwitchTimeoutId)
+          }, 1000)
+        }
+      })
+    }
+  }
+
+  renderLevel1(renderLevel2, renderFailureModal)
 }
 
 initContainer()
