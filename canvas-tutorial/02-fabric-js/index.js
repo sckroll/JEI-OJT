@@ -8,13 +8,14 @@ const MSG_MODAL_BUTTON = '다시 할래요!'
 
 const SRC_CLICK_SOUND = './mp3/MP_Blop.mp3'
 const SRC_CORRECT_SOUND = './mp3/MP_스테이지 클리어 (레트로).mp3'
-const COLORS = ['red', 'blue', 'green', 'cyan', 'magenta', 'yellow', 'brown', 'purple']
+const COLORS = ['red', 'royalblue', 'green', 'grey', 'magenta', 'gold', 'yellowgreen', 'skyblue']
 
 const CANVAS_MARGIN = 200
 const TOTAL_LEVEL = 2
 const MAX_INCORRECT_COUNT = 3
 
 let currLevel = 0, tooltipTimeoutId = null, levelSwitchTimeoutId = null
+
 const clickSound = new Audio(SRC_CLICK_SOUND)
 const correctSound = new Audio(SRC_CORRECT_SOUND)
 correctSound.volume = 0.4
@@ -347,6 +348,34 @@ const initCanvas = () => {
       renderLevel1(renderLevel2, renderFailureModal)
     })
   }
+  const onMouseOver = ({ target }) => {
+    target.animate('opacity', 0.3, {
+      onChange() {
+        canvas.renderAll()
+      },
+      duration: 150
+    })
+  }
+  const onMouseOut = ({ target }) => {
+    target.animate('opacity', 1, {
+      onChange() {
+        canvas.renderAll()
+      },
+      duration: 150
+    })
+  }
+  const enableShapeEvents = (shape, onClick) => {
+    shape.on('mousedown', onClick)
+    shape.on('mouseover', onMouseOver)
+    shape.on('mouseout', onMouseOut)
+  }
+  const disableShapeEvents = (shape, onClick) => {
+    shape.off('mousedown', onClick)
+    shape.on('mouseover', onMouseOver)
+    shape.on('mouseout', onMouseOut)
+    // shape.set({ 'opacity': 0.3 })
+    shape.set({ hoverCursor: 'default' })
+  }
 
   const renderLevel1 = (onSuccess, onFailure) => {
     let incorrectCount = 0
@@ -354,9 +383,9 @@ const initCanvas = () => {
     shapes = renderRandomShape(canvas, 8)
 
     for (const shape of shapes) {
-      shape.on('mousedown', ({ target }) => {
+      const shapeClickHandler = ({ target }) => {
         const { left, top, width } = target.getBoundingRect()
-  
+
         if (target.isTriangle) {
           levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
           correctSound.play()
@@ -368,11 +397,13 @@ const initCanvas = () => {
         } else {
           clickSound.play()
           incorrectCount++
+          disableShapeEvents(shape, shapeClickHandler)
         }
         renderTooltip(canvas, top - 48, left + width, target.isTriangle)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
-      })
+      }
+      enableShapeEvents(shape, shapeClickHandler)
     }
   }
   const renderLevel2 = (onSuccess, onFailure) => {
@@ -383,7 +414,7 @@ const initCanvas = () => {
     shapes = renderRandomShape(canvas, 8, totalTriangleCount)
 
     for (const shape of shapes) {
-      shape.on('mousedown', ({ target }) => {
+      const shapeClickHandler = ({ target }) => {
         const { left, top, width } = target.getBoundingRect()
 
         if (target.isTriangle) {
@@ -392,9 +423,10 @@ const initCanvas = () => {
         } else {
           clickSound.play()
           incorrectCount++
+          disableShapeEvents(shape, shapeClickHandler)
         }
         renderTooltip(canvas, top - 48, left + width, target.isTriangle)
-        
+
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
         if (correctCount === totalTriangleCount) {
           levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
@@ -403,7 +435,8 @@ const initCanvas = () => {
             clearTimeout(levelSwitchTimeoutId)
           }, 1000)
         }
-      })
+      }
+      enableShapeEvents(shape, shapeClickHandler)
     }
   }
 
