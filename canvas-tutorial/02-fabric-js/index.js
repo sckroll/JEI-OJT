@@ -323,6 +323,7 @@ const renderModal = (canvas, titleText, buttonText, onClick) => {
       onClick()
       clearTimeout(uiTimeoutId)
     }, 150)
+    clickSound.play()
   })
   buttonGroup.on('mouseover', () => {
     buttonGroup.animate({ scaleX: 1.05, scaleY: 1.05 }, {
@@ -435,8 +436,8 @@ const initCanvas = () => {
         } else {
           clickSound.play()
           incorrectCount++
-          disableShapeEvents(shape, shapeClickHandler)
         }
+        disableShapeEvents(shape, shapeClickHandler)
         renderTooltip(canvas, top - 48, left + width, target.isTriangle)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
@@ -458,11 +459,19 @@ const initCanvas = () => {
         if (target.isTriangle) {
           correctSound.play()
           correctCount++
+          target.animate({ 
+            top: 20, left: canvas.width / 3 + correctCount * 75, scaleX: 0.5, scaleY: 0.5, opacity: 1
+          }, {
+            onChange() {
+              canvas.renderAll()
+            },
+            duration: 250
+          })
         } else {
           clickSound.play()
           incorrectCount++
-          disableShapeEvents(shape, shapeClickHandler)
         }
+        disableShapeEvents(shape, shapeClickHandler)
         renderTooltip(canvas, top - 48, left + width, target.isTriangle)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
