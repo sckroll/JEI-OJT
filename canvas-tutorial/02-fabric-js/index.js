@@ -14,7 +14,8 @@ const CANVAS_MARGIN = 200
 const TOTAL_LEVEL = 2
 const MAX_INCORRECT_COUNT = 3
 
-let currLevel = 0, tooltipTimeoutId = null, levelSwitchTimeoutId = null
+let currLevel = 0, tooltipTimeoutId = null, uiTimeoutId = null
+const animationTimeoutId = Array(8).fill(null)
 
 const clickSound = new Audio(SRC_CLICK_SOUND)
 const correctSound = new Audio(SRC_CORRECT_SOUND)
@@ -103,23 +104,27 @@ const isShapeCollided = (canvas, shape) => {
  */
 const renderRandomShape = (canvas, shapeCount, minTriangleCount = 1) => {
   const shapes = []
-  let triangleCount = 0
+  let left, top, triangleCount = 0
 
   for (let i = 0; i < shapeCount; i++) {
     const isFixed = i === shapeCount - (minTriangleCount - triangleCount) && minTriangleCount > triangleCount
     const randomNumber = isFixed ? 0 : ~~(Math.random() * 4)
     let shape = null
+    
+    left = ~~(Math.random() * (canvas.width - CANVAS_MARGIN * 2)) + CANVAS_MARGIN
+    top = ~~(Math.random() * (canvas.height - CANVAS_MARGIN * 2)) + CANVAS_MARGIN
 
     if (randomNumber <= 1) {
       // 삼각형 (0) & 패스 (1)
-      const x1 = ~~(Math.random() * (canvas.width - CANVAS_MARGIN * 2)) + CANVAS_MARGIN
-      const y1 = ~~(Math.random() * (canvas.height - CANVAS_MARGIN * 2)) + CANVAS_MARGIN
-      const x2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
-      const y2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
-      const x3 = Math.cos(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 60) + 60)) * (~~(Math.random() * 100) + 50)
-      const y3 = Math.sin(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 60) + 60)) * (~~(Math.random() * 100) + 50)
+      const x1 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+      const y1 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+      const x2 = Math.cos(Math.atan2(y1, x1) + deg2Rad(~~(Math.random() * 60) + 60)) * (~~(Math.random() * 100) + 50)
+      const y2 = Math.sin(Math.atan2(y1, x1) + deg2Rad(~~(Math.random() * 60) + 60)) * (~~(Math.random() * 100) + 50)
 
-      shape = new fabric.Path(`M ${x1} ${y1} l ${x2} ${y2} l ${x3} ${y3}${randomNumber === 0 ? ' z' : ''}`, {
+      shape = new fabric.Path(`M 0 0 l ${x1} ${y1} l ${x2} ${y2}${randomNumber === 0 ? ' z' : ''}`, {
+        left,
+        top,
+        opacity: 0,
         fill: 'transparent',
         stroke: COLORS[i],
         strokeWidth: 2,
@@ -128,16 +133,17 @@ const renderRandomShape = (canvas, shapeCount, minTriangleCount = 1) => {
       })
     } else if (randomNumber === 2) {
       // 사각형 (2)
-      const x1 = ~~(Math.random() * (canvas.width - CANVAS_MARGIN * 2)) + CANVAS_MARGIN
-      const y1 = ~~(Math.random() * (canvas.height - CANVAS_MARGIN * 2)) + CANVAS_MARGIN
-      const x2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
-      const y2 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+      const x1 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+      const y1 = (~~(Math.random() * 2) === 0 ? 1 : -1) * (~~(Math.random() * 100) + 50)
+      const x2 = Math.cos(Math.atan2(y1, x1) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
+      const y2 = Math.sin(Math.atan2(y1, x1) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
       const x3 = Math.cos(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
       const y3 = Math.sin(Math.atan2(y2, x2) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
-      const x4 = Math.cos(Math.atan2(y3, x3) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
-      const y4 = Math.sin(Math.atan2(y3, x3) + deg2Rad(~~(Math.random() * 70) + 30)) * (~~(Math.random() * 100) + 50)
 
-      shape = new fabric.Path(`M ${x1} ${y1} l ${x2} ${y2} l ${x3} ${y3} l ${x4} ${y4} z`, {
+      shape = new fabric.Path(`M 0 0 l ${x1} ${y1} l ${x2} ${y2} l ${x3} ${y3} z`, {
+        left,
+        top,
+        opacity: 0,
         fill: 'transparent',
         stroke: COLORS[i],
         strokeWidth: 2,
@@ -146,14 +152,13 @@ const renderRandomShape = (canvas, shapeCount, minTriangleCount = 1) => {
       })
     } else if (randomNumber === 3) {
       // 원 (3)
-      const left = ~~(Math.random() * (canvas.width - CANVAS_MARGIN)) + 100
-      const top = ~~(Math.random() * (canvas.height - CANVAS_MARGIN)) + 100
       const radius = ~~(Math.random() * 50) + 50
 
       shape = new fabric.Circle({
         left,
         top,
         radius,
+        opacity: 0,
         fill: 'transparent',
         stroke: COLORS[i],
         strokeWidth: 2,
@@ -173,6 +178,21 @@ const renderRandomShape = (canvas, shapeCount, minTriangleCount = 1) => {
 
     canvas.add(shape)
     shapes.push(shape)
+  }
+
+  // 도형 하나씩 페이드인
+  for (let i = 0; i < shapeCount; i++) {
+    animationTimeoutId[i] = setTimeout(() => {
+      shapes[i].animate('opacity', 1, {
+        onChange() {
+          canvas.renderAll()
+        },
+        onComplete() {
+          clearTimeout(animationTimeoutId[i])
+        },
+        duration: 250
+      })
+    }, 150 * i)
   }
 
   return shapes
@@ -285,13 +305,25 @@ const renderModal = (canvas, titleText, buttonText, onClick) => {
   const modalGroup = new fabric.Group([overlay, modalContainer, modalTitle, buttonGroup], {
     top: 0,
     left: 0,
+    opacity: 0,
     selectable: false,
     subTargetCheck: true,
     hoverCursor: 'default'
   })
   canvas.add(modalGroup)
 
-  buttonGroup.on('mousedown', onClick)
+  buttonGroup.on('mousedown', () => {
+    modalGroup.animate('opacity', 0, {
+      onChange() {
+        canvas.renderAll()
+      },
+      duration: 150
+    })
+    uiTimeoutId = setTimeout(() => {
+      onClick()
+      clearTimeout(uiTimeoutId)
+    }, 150)
+  })
   buttonGroup.on('mouseover', () => {
     buttonGroup.animate({ scaleX: 1.05, scaleY: 1.05 }, {
       onChange() {
@@ -307,6 +339,13 @@ const renderModal = (canvas, titleText, buttonText, onClick) => {
       },
       duration: 100
     })
+  })
+
+  modalGroup.animate('opacity', 1, {
+    onChange() {
+      canvas.renderAll()
+    },
+    duration: 150
   })
 
   return modalGroup
@@ -349,7 +388,7 @@ const initCanvas = () => {
     })
   }
   const onMouseOver = ({ target }) => {
-    target.animate('opacity', 0.3, {
+    target?.animate('opacity', 0.3, {
       onChange() {
         canvas.renderAll()
       },
@@ -357,7 +396,7 @@ const initCanvas = () => {
     })
   }
   const onMouseOut = ({ target }) => {
-    target.animate('opacity', 1, {
+    target?.animate('opacity', 1, {
       onChange() {
         canvas.renderAll()
       },
@@ -388,10 +427,10 @@ const initCanvas = () => {
         if (target.isTriangle) {
           levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
           correctSound.play()
-          levelSwitchTimeoutId = setTimeout(() => {
+          uiTimeoutId = setTimeout(() => {
             canvas.remove(title, ...shapes)
             onSuccess(renderSuccessModal, onFailure)
-            clearTimeout(levelSwitchTimeoutId)
+            clearTimeout(uiTimeoutId)
           }, 1000)
         } else {
           clickSound.play()
@@ -429,9 +468,9 @@ const initCanvas = () => {
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
         if (correctCount === totalTriangleCount) {
           levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
-          levelSwitchTimeoutId = setTimeout(() => {
+          uiTimeoutId = setTimeout(() => {
             onSuccess()
-            clearTimeout(levelSwitchTimeoutId)
+            clearTimeout(uiTimeoutId)
           }, 1000)
         }
       }
