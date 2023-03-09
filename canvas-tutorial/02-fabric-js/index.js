@@ -422,9 +422,7 @@ const initCanvas = () => {
     shapes = renderRandomShape(canvas, 8)
 
     for (const shape of shapes) {
-      const shapeClickHandler = ({ target }) => {
-        const { left, top, width } = target.getBoundingRect()
-
+      const shapeClickHandler = ({ target, e }) => {
         if (target.isTriangle) {
           levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
           correctSound.play()
@@ -438,7 +436,7 @@ const initCanvas = () => {
           incorrectCount++
         }
         disableShapeEvents(shape, shapeClickHandler)
-        renderTooltip(canvas, top - 48, left + width, target.isTriangle)
+        renderTooltip(canvas, e.clientY - 64, e.clientX + 16, target.isTriangle)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
       }
@@ -453,9 +451,7 @@ const initCanvas = () => {
     shapes = renderRandomShape(canvas, 8, totalTriangleCount)
 
     for (const shape of shapes) {
-      const shapeClickHandler = ({ target }) => {
-        const { left, top, width } = target.getBoundingRect()
-
+      const shapeClickHandler = ({ target, e }) => {
         if (target.isTriangle) {
           correctSound.play()
           correctCount++
@@ -472,7 +468,7 @@ const initCanvas = () => {
           incorrectCount++
         }
         disableShapeEvents(shape, shapeClickHandler)
-        renderTooltip(canvas, top - 48, left + width, target.isTriangle)
+        renderTooltip(canvas, e.clientY - 64, e.clientX + 16, target.isTriangle)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
         if (correctCount === totalTriangleCount) {
