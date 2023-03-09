@@ -14,7 +14,8 @@ const CANVAS_MARGIN = 200
 const TOTAL_LEVEL = 2
 const MAX_INCORRECT_COUNT = 3
 
-let currLevel = 0, tooltipTimeoutId = null, uiTimeoutId = null
+let currLevel = 0, uiTimeoutId = null
+const tooltipTimeoutId = Array(8).fill(null)
 const animationTimeoutId = Array(8).fill(null)
 
 const clickSound = new Audio(SRC_CLICK_SOUND)
@@ -189,6 +190,7 @@ const renderRandomShape = (canvas, shapeCount, minTriangleCount = 1) => {
         },
         onComplete() {
           clearTimeout(animationTimeoutId[i])
+          animationTimeoutId[i] = null
         },
         duration: 250
       })
@@ -201,7 +203,7 @@ const renderRandomShape = (canvas, shapeCount, minTriangleCount = 1) => {
 /**
  * 툴팁 렌더링
  */
-const renderTooltip = (canvas, top, left, isCorrected) => {
+const renderTooltip = (canvas, top, left, isCorrected, index) => {
   const tooltipBackground = new fabric.Rect({
     width: 48,
     height: 48,
@@ -243,17 +245,18 @@ const renderTooltip = (canvas, top, left, isCorrected) => {
     },
     duration: 150
   })
-  tooltipTimeoutId = setTimeout(() => {
+  tooltipTimeoutId[index] = setTimeout(() => {
     tooltip.animate('opacity', 0, {
       onChange() {
         canvas.renderAll()
       },
       onComplete() {
         canvas.remove(tooltip)
+        clearTimeout(tooltipTimeoutId[index])
+        tooltipTimeoutId[index] = null
       },
       duration: 150
     })
-    clearTimeout(tooltipTimeoutId)
   }, 500)
 }
 
@@ -421,7 +424,7 @@ const initCanvas = () => {
     title = renderTitle(canvas, TITLE_QUESTION_1)
     shapes = renderRandomShape(canvas, 8)
 
-    for (const shape of shapes) {
+    for (let i = 0; i < shapes.length; i++) {
       const shapeClickHandler = ({ target, e }) => {
         if (target.isTriangle) {
           levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
@@ -435,12 +438,12 @@ const initCanvas = () => {
           clickSound.play()
           incorrectCount++
         }
-        disableShapeEvents(shape, shapeClickHandler)
-        renderTooltip(canvas, e.clientY - 64, e.clientX + 16, target.isTriangle)
+        disableShapeEvents(shapes[i], shapeClickHandler)
+        renderTooltip(canvas, e.clientY - 64, e.clientX + 16, target.isTriangle, i)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
       }
-      enableShapeEvents(shape, shapeClickHandler)
+      enableShapeEvents(shapes[i], shapeClickHandler)
     }
   }
   const renderLevel2 = (onSuccess, onFailure) => {
@@ -450,7 +453,7 @@ const initCanvas = () => {
     title = renderTitle(canvas, TITLE_QUESTION_2)
     shapes = renderRandomShape(canvas, 8, totalTriangleCount)
 
-    for (const shape of shapes) {
+    for (let i = 0; i < shapes.length; i++) {
       const shapeClickHandler = ({ target, e }) => {
         if (target.isTriangle) {
           correctSound.play()
@@ -467,8 +470,8 @@ const initCanvas = () => {
           clickSound.play()
           incorrectCount++
         }
-        disableShapeEvents(shape, shapeClickHandler)
-        renderTooltip(canvas, e.clientY - 64, e.clientX + 16, target.isTriangle)
+        disableShapeEvents(shapes[i], shapeClickHandler)
+        renderTooltip(canvas, e.clientY - 64, e.clientX + 16, target.isTriangle, i)
 
         if (incorrectCount === MAX_INCORRECT_COUNT) onFailure()
         if (correctCount === totalTriangleCount) {
@@ -479,7 +482,7 @@ const initCanvas = () => {
           }, 1000)
         }
       }
-      enableShapeEvents(shape, shapeClickHandler)
+      enableShapeEvents(shapes[i], shapeClickHandler)
     }
   }
 
