@@ -371,9 +371,8 @@ const initCanvas = () => {
   }
   const disableShapeEvents = (shape, onClick) => {
     shape.off('mousedown', onClick)
-    shape.on('mouseover', onMouseOver)
-    shape.on('mouseout', onMouseOut)
-    // shape.set({ 'opacity': 0.3 })
+    shape.off('mouseover', onMouseOver)
+    shape.off('mouseout', onMouseOut)
     shape.set({ hoverCursor: 'default' })
   }
 
