@@ -392,7 +392,7 @@ export const initCanvas = () => {
     for (let i = 0; i < shapes.length; i++) {
       const shapeClickHandler = ({ target, e }) => {
         if (target.isTriangle) {
-          levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
+          if (currLevel === 0) levelIndicatorGroup.item(currLevel++).set({ fill: 'black' })
           correctSound.play()
           uiTimeoutId = setTimeout(() => {
             canvas.remove(title, ...shapes)
@@ -421,6 +421,7 @@ export const initCanvas = () => {
     for (let i = 0; i < shapes.length; i++) {
       const shapeClickHandler = ({ target, e }) => {
         if (target.isTriangle) {
+          correctSound.load()
           correctSound.play()
           correctCount++
           target.animate({
