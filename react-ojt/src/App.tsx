@@ -12,7 +12,7 @@ type PropTypes = {
 const Container = ({ children }: PropTypes) => {
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-slate-200">
-      <div className="aspect-[9/16] h-screen bg-white">
+      <div className="aspect-[9/19.5] h-screen bg-white">
         { children }
       </div>
     </div>
