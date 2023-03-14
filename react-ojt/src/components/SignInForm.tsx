@@ -2,6 +2,7 @@ import { ChangeEvent, MouseEvent, ReactNode, useEffect, useState } from "react"
 import InputBox from "./InputBox"
 import Button from "./Button"
 import useUserList from "../hooks/useUserList"
+import { signIn } from "../api/auth"
 
 type PropTypes = {
   children: ReactNode
@@ -30,7 +31,12 @@ export default function SignInForm() {
   }
   const onClick = (e: MouseEvent) => {
     e.preventDefault()
-    console.log(signInResult)
+    const { status, reason } = signInResult
+    if (status === 'success') {
+      signIn(formData.id)
+    } else {
+      console.log(reason)
+    }
   }
   
   useEffect(() => {

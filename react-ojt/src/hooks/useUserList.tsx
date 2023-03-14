@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { getUserList } from "../api/users"
 
 type User = {
   id: string,
@@ -9,12 +10,11 @@ const useUserList = () => {
   const [userList, setUserList]  = useState<User[]>()
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await fetch('users.json')
-      const data = await response.json()
-      setUserList(data)
+    const fetchUserList = async () => {
+      const userListData = await getUserList()
+      setUserList(userListData)
     }
-    fetchUserData()
+    fetchUserList()
   }, [])
 
   return userList
