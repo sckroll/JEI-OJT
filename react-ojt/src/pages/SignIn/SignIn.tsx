@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import JEILogo from "../../components/JEILogo"
-import LoginForm from "../../components/LoginForm"
+import SignInForm from "../../components/SignInForm"
 
 type PropTypes = {
   children: ReactNode
@@ -18,7 +18,7 @@ export default function SignIn() {
   return (
     <SignInContainer>
       <JEILogo />
-      <LoginForm />
+      <SignInForm />
     </SignInContainer>
   )
 }

@@ -1,7 +1,5 @@
-import React from 'react'
-
-export default function Stats() {
+export default function MyPage() {
   return (
-    <div>Stats</div>
+    <div>MyPage</div>
   )
 }
