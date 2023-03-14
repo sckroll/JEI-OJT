@@ -3,6 +3,7 @@ import InputBox from "./InputBox"
 import Button from "./Button"
 import useUserList from "../hooks/useUserList"
 import { signIn } from "../api/auth"
+import { useNavigate } from "react-router-dom"
 
 type PropTypes = {
   children: ReactNode
@@ -24,6 +25,7 @@ export default function SignInForm() {
   const [formData, setFormData] = useState({ id: '', password: '' })
   const [signInResult, setSignInResult] = useState<SignInResult>({ status: 'failure', reason: 'invalid form' })
   const userList = useUserList()
+  const navigate = useNavigate()
 
   const onChange = ({ target }: ChangeEvent) => {
     if (target.id === 'user-id') setFormData({ ...formData, id: (target as HTMLInputElement).value })
@@ -34,6 +36,7 @@ export default function SignInForm() {
     const { status, reason } = signInResult
     if (status === 'success') {
       signIn(formData.id)
+      navigate('/main')
     } else {
       console.log(reason)
     }

@@ -1,4 +1,6 @@
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { isSignedIn } from "../../api/auth"
 import JEILogo from "../../components/JEILogo"
 import SignInForm from "../../components/SignInForm"
 
@@ -15,10 +17,18 @@ const SignInContainer = ({ children }: PropTypes) => {
 }
 
 export default function SignIn() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isSignedIn()) navigate('/main')
+  }, [])
+
   return (
-    <SignInContainer>
-      <JEILogo />
-      <SignInForm />
-    </SignInContainer>
+    isSignedIn() ? null : (
+      <SignInContainer>
+        <JEILogo />
+        <SignInForm />
+      </SignInContainer>
+    )
   )
 }

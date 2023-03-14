@@ -7,3 +7,7 @@ export const signIn = (id: string) => {
 export const signOut = () => {
   localStorage.removeItem(STORAGE_KEY)
 }
+
+export const isSignedIn = () => {
+  return !!localStorage.getItem(STORAGE_KEY)
+}
