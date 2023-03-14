@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Main from './pages/Main'
 import Question1 from './pages/Main/Question1'
 import SignIn from './pages/SignIn'
-import Stats from './pages/Stats'
+import MyPage from './pages/MyPage'
 
 type PropTypes = {
   children: ReactNode
@@ -29,7 +29,7 @@ function App() {
           <Route path='/main' element={<Main />}>
             <Route path='q1' element={<Question1 />}></Route>
           </Route>
-          <Route path='/stats' element={<Stats />}></Route>
+          <Route path='/stats' element={<MyPage />}></Route>
         </Routes>
       </BrowserRouter>
     </Container>
