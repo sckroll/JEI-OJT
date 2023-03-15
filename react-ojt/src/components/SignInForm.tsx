@@ -42,7 +42,10 @@ export default function SignInForm() {
       onClick() {
         setModal(false)
       }
-    }
+    },
+    overlay() {
+      setModal(false)
+    },
   })
   const userList = useUserList()
   const navigate = useNavigate()
