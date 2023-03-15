@@ -29,7 +29,7 @@ function App() {
           <Route path='/main' element={<Main />}>
             <Route path='q1' element={<Question1 />}></Route>
           </Route>
-          <Route path='/stats' element={<MyPage />}></Route>
+          <Route path='/my-page' element={<MyPage />}></Route>
         </Routes>
       </BrowserRouter>
     </Container>

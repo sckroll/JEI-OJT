@@ -1,5 +1,3 @@
-import { MouseEvent } from "react"
-
 type ModalData = {
   title: string,
   content: string,
@@ -9,4 +7,5 @@ type ModalData = {
   },
   overlay: () => void
 }
+
 export default ModalData

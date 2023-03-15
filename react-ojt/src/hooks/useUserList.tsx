@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react"
 import { getUserList } from "../api/users"
-
-type User = {
-  id: string,
-  password: string
-}
+import User from "../types/User"
 
 const useUserList = () => {
   const [userList, setUserList]  = useState<User[]>()

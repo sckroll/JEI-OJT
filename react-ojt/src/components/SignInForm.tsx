@@ -1,11 +1,11 @@
 import { ChangeEvent, MouseEvent, ReactNode, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import InputBox from "./InputBox"
 import Button from "./Button"
 import useUserList from "../hooks/useUserList"
 import { signIn } from "../api/auth"
-import { useNavigate } from "react-router-dom"
 import Modal from "./Modal"
-import ModalData from "../types/modalData"
+import ModalData from "../types/ModalData"
 
 enum LoginFailureReasons {
   INVALID_ID,
