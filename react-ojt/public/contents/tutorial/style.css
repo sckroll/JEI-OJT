@@ -1,0 +1,47 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+#svg-container {
+  width: 100%;
+  height: 100%;
+}
+.circle-outer-1,
+.circle-outer-2 {
+  stroke: pink;
+  stroke-width: 6;
+  stroke-linecap: round;
+  fill: transparent;
+  /* transform-origin: 60px 60px;
+  transform: rotate(90deg) scaleX(-1) ; */
+}
+.circle-outer-1.success,
+.circle-outer-2.success {
+  transition: all 0.15s;
+  stroke: purple;
+}
+.circle-inner-1,
+.circle-inner-2 {
+  stroke: pink;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 5;
+  fill: transparent;
+}
+.speaker {
+  cursor: pointer;
+}
+.arrow-outer {
+  fill: pink;
+}
+.arrow {
+  stroke: white;
+  stroke-width: 4;
+  stroke-linecap: round;
+  fill: transparent;
+}
+.circle-indicator {
+  cursor: pointer;
+}

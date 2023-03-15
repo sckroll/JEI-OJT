@@ -26,8 +26,12 @@ const HeaderMenu = () => {
       님, 안녕하세요!
     </p>
     <div className='flex gap-x-2'>
-      <ChartBarIcon className='w-8 cursor-pointer' onClick={myPageRouteHandler} />
-      <ArrowLeftOnRectangleIcon className='w-8 cursor-pointer' onClick={logoutHandler} />
+      <ChartBarIcon
+        className='w-8 cursor-pointer stroke-slate-600 hover:stroke-slate-300 transition-colors'
+        onClick={myPageRouteHandler} />
+      <ArrowLeftOnRectangleIcon
+        className='w-8 cursor-pointer stroke-slate-600 hover:stroke-slate-300 transition-colors'
+        onClick={logoutHandler} />
     </div>
   </div>
   )
@@ -55,7 +59,7 @@ export default function Main() {
 
   return (
     isSignedIn() ? (
-      <div className='h-full p-4 flex flex-col justify-between items-center`'>
+      <div className='h-full p-4 flex flex-col gap-4'>
         <HeaderMenu />
 
         <Routes>
@@ -63,7 +67,7 @@ export default function Main() {
           { paths.map(({ path }) => (<Route key={path} path={path} element={<Content />}></Route>)) }
         </Routes>
 
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4 mb-4">
           { paths.map(({ path, name }) => (<Button key={path} onClick={() => navigate(`/main/${path}`)}>{ name }</Button>)) }
         </div>
       </div>
