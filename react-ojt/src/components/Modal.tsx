@@ -20,7 +20,7 @@ const Overlay = ({ children }: OverlayPropTypes) => {
 
 const ModalContainer = ({ modalData }: ModalPropTypes) => {
   return (
-    <section className="p-6 bg-white rounded-md flex flex-col items-center gap-y-4 w-1/3">
+    <section className="p-8 bg-white rounded-md flex flex-col items-center gap-y-4 w-3/4 sm:w-64">
       <div className="flex flex-col items-center gap-y-2">
         <h1 className="text-xl font-bold text-slate-700">{ modalData.title }</h1>
         <p className="text-sm text-slate-400">{ modalData.content }</p>

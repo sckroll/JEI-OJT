@@ -24,7 +24,7 @@ type SignInResult = {
 
 const FormContainer = ({ children }: PropTypes) => {
   return (
-    <form className="w-2/3 flex flex-col justify-center items-center p-4 gap-y-4">
+    <form className="w-3/4 flex flex-col justify-center items-center p-4 gap-y-4">
       { children }
     </form>
   )
