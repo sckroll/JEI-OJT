@@ -1,13 +1,11 @@
 const DECREASING_SPEED_FACTOR = 10
 
-const clickSound = new Audio('mp3/MP_Blop.mp3')
-
 /**
 * 음성 합성
 */
 
 const $speaker = document.querySelector('.speaker')
-const title = '세 종류의 문제가 총 여섯 번 출제될 거에요. 준비가 되었다면 아래의 다음 버튼을 눌러주세요.'
+const title = '세 종류의 문제가 총 여섯 번 출제될 거에요. 준비가 되었다면 아래 도형 중에서 삼각형을 눌러주세요.'
 
 const synth = window.speechSynthesis
 const speech = new SpeechSynthesisUtterance(title)
@@ -46,7 +44,7 @@ const drawCircle = timestamp => {
 
 animationId = requestAnimationFrame(drawCircle)
 
-const $btnNext = document.getElementById('btn-next')
-$btnNext.addEventListener('click', () => {
+const $rectangle = document.getElementById('rectangle')
+$rectangle.addEventListener('click', () => {
   window.parent.postMessage({ state: 'success' })
 })
