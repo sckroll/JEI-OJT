@@ -4,7 +4,7 @@ import { ChartBarIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outl
 import Button from '../../components/Button'
 import User from '../../types/User'
 import Content from './Content'
-import { signOut } from '../../api/auth'
+import { isSignedIn, signOut } from '../../api/auth'
 
 const HeaderMenu = () => {
   const navigate = useNavigate()
@@ -46,22 +46,27 @@ export default function Main() {
     { path: 'q5', name: '문제 5' }
   ]
 
+  useEffect(() => {
+    if (!isSignedIn()) navigate('/sign-in')
+  }, [])
   // useEffect(() => {
     
   // }, [userData])
 
   return (
-    <div className='h-full p-4 flex flex-col justify-between items-center`'>
-      <HeaderMenu />
+    isSignedIn() ? (
+      <div className='h-full p-4 flex flex-col justify-between items-center`'>
+        <HeaderMenu />
 
-      <Routes>
-        <Route path='*' element={<Navigate to='tutorial' />}></Route>
-        { paths.map(({ path }) => (<Route key={path} path={path} element={<Content />}></Route>)) }
-      </Routes>
+        <Routes>
+          <Route path='*' element={<Navigate to='tutorial' />}></Route>
+          { paths.map(({ path }) => (<Route key={path} path={path} element={<Content />}></Route>)) }
+        </Routes>
 
-      <div className="flex flex-col gap-y-4">
-        { paths.map(({ path, name }) => (<Button key={path} onClick={() => navigate(`/main/${path}`)}>{ name }</Button>)) }
+        <div className="flex flex-col gap-y-4">
+          { paths.map(({ path, name }) => (<Button key={path} onClick={() => navigate(`/main/${path}`)}>{ name }</Button>)) }
+        </div>
       </div>
-    </div>
+    ) : null
   )
 }
