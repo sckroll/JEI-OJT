@@ -45,3 +45,8 @@ const drawCircle = timestamp => {
 }
 
 animationId = requestAnimationFrame(drawCircle)
+
+const $btnNext = document.getElementById('btn-next')
+$btnNext.addEventListener('click', () => {
+  window.parent.postMessage({ state: 'success' })
+})
