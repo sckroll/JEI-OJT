@@ -4,8 +4,21 @@ import { ChartBarIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outl
 import Button from '../../components/Button'
 import User from '../../types/User'
 import Content from './Content'
+import { signOut } from '../../api/auth'
 
 const HeaderMenu = () => {
+  const navigate = useNavigate()
+
+  const myPageRouteHandler = () => {
+    navigate('/my-page')
+  }
+  const logoutHandler = () => {
+    if (confirm('로그아웃 하시겠어요?')) {;
+      signOut()
+      navigate('/sign-in')
+    }
+  }
+
   return (
     <div className='flex justify-between items-center'>
     <p>
@@ -13,8 +26,8 @@ const HeaderMenu = () => {
       님, 안녕하세요!
     </p>
     <div className='flex gap-x-2'>
-      <ChartBarIcon className='w-8' />
-      <ArrowLeftOnRectangleIcon className='w-8' />
+      <ChartBarIcon className='w-8 cursor-pointer' onClick={myPageRouteHandler} />
+      <ArrowLeftOnRectangleIcon className='w-8 cursor-pointer' onClick={logoutHandler} />
     </div>
   </div>
   )
@@ -43,11 +56,11 @@ export default function Main() {
 
       <Routes>
         <Route path='*' element={<Navigate to='tutorial' />}></Route>
-        { paths.map(({ path }) => (<Route path={path} element={<Content />}></Route>)) }
+        { paths.map(({ path }) => (<Route key={path} path={path} element={<Content />}></Route>)) }
       </Routes>
 
       <div className="flex flex-col gap-y-4">
-        { paths.map(({ path, name }) => (<Button onClick={() => navigate(`/main/${path}`)}>{ name }</Button>)) }
+        { paths.map(({ path, name }) => (<Button key={path} onClick={() => navigate(`/main/${path}`)}>{ name }</Button>)) }
       </div>
     </div>
   )
