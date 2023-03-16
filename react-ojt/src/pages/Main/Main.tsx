@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { ChartBarIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import Button from '../../components/Button'
 import User from '../../types/User'
@@ -39,7 +39,9 @@ const HeaderMenu = () => {
 
 export default function Main() {
   // const [userData, setUserData] = useState<User>()
+  const [contentIndex, setContentIndex] = useState(0)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const paths = [
     { path: 'tutorial', name: '튜토리얼' },
@@ -49,10 +51,20 @@ export default function Main() {
     { path: 'q4', name: '문제 4' },
     { path: 'q5', name: '문제 5' }
   ]
+  const onNextPath = () => {
+    setContentIndex(n => {
+      navigate(`/main/${paths[n + 1].path}`)
+      return n + 1
+    })
+  }
 
   useEffect(() => {
     if (!isSignedIn()) navigate('/sign-in')
-  }, [])
+    
+    const currPath = pathname.split('/')[2]
+    const idx = paths.findIndex(({ path }) => currPath === path)
+    setContentIndex(idx)
+  }, [contentIndex])
   // useEffect(() => {
     
   // }, [userData])
@@ -64,7 +76,7 @@ export default function Main() {
 
         <Routes>
           <Route path='*' element={<Navigate to='tutorial' />}></Route>
-          { paths.map(({ path }) => (<Route key={path} path={path} element={<Content />}></Route>)) }
+          { paths.map(({ path }) => (<Route key={path} path={path} element={<Content onNextPath={onNextPath} />}></Route>)) }
         </Routes>
 
         <div className="flex flex-col gap-y-4 mb-4">

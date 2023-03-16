@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
-export default function Content() {
+type PropTypes = {
+  onNextPath: () => void
+}
+
+export default function Content({ onNextPath }: PropTypes) {
   const [question, setQuestion] = useState<string>()
   const { pathname } = useLocation()
-  const navigate = useNavigate()
 
   const messageHandler = (e: MessageEvent) => {
     if (e.origin !== location.origin) return
-    if (e.data?.state === 'success') navigate('/main/q1')
+    if (e.data?.state === 'success') onNextPath()
   }
 
   useEffect(() => {
