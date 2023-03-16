@@ -1,44 +1,13 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { ChartBarIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import Button from '../../components/Button'
-import User from '../../types/User'
 import Content from './Content'
-import { isSignedIn, signOut } from '../../api/auth'
+import { isSignedIn } from '../../api/auth'
 import Clear from './Clear'
+import HeaderMenu from '../../components/HeaderMenu'
 
 type PropTypes = {
   children: ReactNode
-}
-
-const HeaderMenu = () => {
-  const navigate = useNavigate()
-
-  const myPageRouteHandler = () => {
-    navigate('/my-page')
-  }
-  const logoutHandler = () => {
-    if (confirm('로그아웃 하시겠어요?')) {;
-      signOut()
-      navigate('/sign-in')
-    }
-  }
-
-  return (
-    <div className='flex justify-between items-center'>
-    <p>
-      <strong className='font-bold'>김성찬</strong>님, 안녕하세요!
-    </p>
-    <div className='flex gap-x-2'>
-      <ChartBarIcon
-        className='w-8 cursor-pointer stroke-slate-600 hover:stroke-slate-300 transition-colors'
-        onClick={myPageRouteHandler} />
-      <ArrowLeftOnRectangleIcon
-        className='w-8 cursor-pointer stroke-slate-600 hover:stroke-slate-300 transition-colors'
-        onClick={logoutHandler} />
-    </div>
-  </div>
-  )
 }
 
 const ButtonWrapper = ({ children }: PropTypes) => {
@@ -62,7 +31,6 @@ export default function Main() {
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  // const [userData, setUserData] = useState<User>()
   const [contentIndex, setContentIndex] = useState(() => {
     const currPath = pathname.split('/')[2]
     return paths.findIndex(({ path }) => currPath === path)
@@ -86,9 +54,6 @@ export default function Main() {
       navigate(`/main/${paths[contentIndex].path}`)
     }
   }, [contentIndex])
-  // useEffect(() => {
-    
-  // }, [userData])
 
   return (
     isSignedIn() ? (

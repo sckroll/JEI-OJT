@@ -1,12 +1,15 @@
-import { ReactNode } from 'react'
+import { createContext, ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Main from './pages/Main'
 import SignIn from './pages/SignIn'
 import MyPage from './pages/MyPage'
+import { ContentState } from './types/User'
 
 type PropTypes = {
   children: ReactNode
 }
+
+// const ContentContext = createContext<ContentState[]>([])
 
 const Container = ({ children }: PropTypes) => {
   return (
@@ -22,16 +25,18 @@ const Container = ({ children }: PropTypes) => {
 
 function App() {
   return (
-    <Container>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/*' element={<Navigate to='/sign-in' />}></Route>
-          <Route path='/sign-in' element={<SignIn />}></Route>
-          <Route path='/main/*' element={<Main />}></Route>
-          <Route path='/my-page' element={<MyPage />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </Container>
+    // <ContentContext.Provider value={[]}>
+      <Container>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/*' element={<Navigate to='/sign-in' />}></Route>
+            <Route path='/sign-in' element={<SignIn />}></Route>
+            <Route path='/main/*' element={<Main />}></Route>
+            <Route path='/my-page' element={<MyPage />}></Route>
+          </Routes>
+        </BrowserRouter>
+      </Container>
+    // </ContentContext.Provider>
   )
 }
 
