@@ -2,16 +2,16 @@ import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 
 type PropTypes = {
-  onNextPath: () => void
+  onResult: (isSuccess: boolean) => void
 }
 
-export default function Content({ onNextPath }: PropTypes) {
+export default function Content({ onResult }: PropTypes) {
   const [question, setQuestion] = useState<string>()
   const { pathname } = useLocation()
 
   const messageHandler = (e: MessageEvent) => {
     if (e.origin !== location.origin) return
-    if (e.data?.state === 'success') onNextPath()
+    if (e.data.source === 'jei-contents') onResult(e.data.isSuccess)
   }
 
   useEffect(() => {

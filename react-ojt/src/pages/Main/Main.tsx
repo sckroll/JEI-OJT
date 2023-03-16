@@ -49,21 +49,29 @@ export default function Main() {
     { path: 'q2', name: '문제 2' },
     { path: 'q3', name: '문제 3' },
     { path: 'q4', name: '문제 4' },
-    { path: 'q5', name: '문제 5' }
+    { path: 'q5', name: '문제 5' },
+    { path: 'q6', name: '문제 6' }
   ]
-  const onNextPath = () => {
+  const getPathIdx = () => {
+    const currPath = pathname.split('/')[2]
+    return paths.findIndex(({ path }) => currPath === path)
+  }
+  const onResult = (isSuccess: boolean) => {
+    console.log(isSuccess)
+    
     setContentIndex(n => {
       navigate(`/main/${paths[n + 1].path}`)
       return n + 1
     })
   }
+  const onClick = (path: string, idx: number) => {
+    setContentIndex(idx)
+    navigate(`/main/${path}`)
+  }
 
   useEffect(() => {
     if (!isSignedIn()) navigate('/sign-in')
-    
-    const currPath = pathname.split('/')[2]
-    const idx = paths.findIndex(({ path }) => currPath === path)
-    setContentIndex(idx)
+    setContentIndex(getPathIdx())
   }, [contentIndex])
   // useEffect(() => {
     
@@ -76,11 +84,11 @@ export default function Main() {
 
         <Routes>
           <Route path='*' element={<Navigate to='tutorial' />}></Route>
-          { paths.map(({ path }) => (<Route key={path} path={path} element={<Content onNextPath={onNextPath} />}></Route>)) }
+          { paths.map(({ path }) => (<Route key={path} path={path} element={<Content onResult={onResult} />}></Route>)) }
         </Routes>
 
         <div className="flex flex-col gap-y-4 mb-4">
-          { paths.map(({ path, name }) => (<Button key={path} onClick={() => navigate(`/main/${path}`)}>{ name }</Button>)) }
+          { paths.map(({ path, name }, idx) => (<Button key={path} onClick={() => onClick(path, idx)}>{ name }</Button>)) }
         </div>
       </div>
     ) : null

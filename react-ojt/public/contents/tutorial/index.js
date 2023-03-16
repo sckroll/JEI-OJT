@@ -46,5 +46,5 @@ animationId = requestAnimationFrame(drawCircle)
 
 const $rectangle = document.getElementById('rectangle')
 $rectangle.addEventListener('click', () => {
-  window.parent.postMessage({ state: 'success' })
+  window.parent.postMessage({ source: 'jei-contents', isSuccess: true })
 })

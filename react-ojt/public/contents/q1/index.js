@@ -107,7 +107,7 @@ window.addEventListener('pointermove', ({ clientX, clientY }) => {
     successSound.play()
 
     setTimeout(() => {
-      window.parent.postMessage({ state: 'success' })
+      window.parent.postMessage({ source: 'jei-contents', isSuccess: true })
     }, 1000)
   }
 })
