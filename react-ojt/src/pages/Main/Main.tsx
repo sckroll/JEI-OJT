@@ -1,10 +1,15 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { ChartBarIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import Button from '../../components/Button'
 import User from '../../types/User'
 import Content from './Content'
 import { isSignedIn, signOut } from '../../api/auth'
+import Clear from './Clear'
+
+type PropTypes = {
+  children: ReactNode
+}
 
 const HeaderMenu = () => {
   const navigate = useNavigate()
@@ -22,8 +27,7 @@ const HeaderMenu = () => {
   return (
     <div className='flex justify-between items-center'>
     <p>
-      <strong className='font-bold'>김성찬</strong>
-      님, 안녕하세요!
+      <strong className='font-bold'>김성찬</strong>님, 안녕하세요!
     </p>
     <div className='flex gap-x-2'>
       <ChartBarIcon
@@ -37,12 +41,15 @@ const HeaderMenu = () => {
   )
 }
 
-export default function Main() {
-  // const [userData, setUserData] = useState<User>()
-  const [contentIndex, setContentIndex] = useState(0)
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
+const ButtonWrapper = ({ children }: PropTypes) => {
+  return (
+    <div className="flex flex-col gap-y-3 mb-4">
+      { children }
+    </div>
+  )
+}
 
+export default function Main() {
   const paths = [
     { path: 'tutorial', name: '튜토리얼' },
     { path: 'q1', name: '문제 1' },
@@ -52,26 +59,32 @@ export default function Main() {
     { path: 'q5', name: '문제 5' },
     { path: 'q6', name: '문제 6' }
   ]
-  const getPathIdx = () => {
+
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  // const [userData, setUserData] = useState<User>()
+  const [contentIndex, setContentIndex] = useState(() => {
     const currPath = pathname.split('/')[2]
     return paths.findIndex(({ path }) => currPath === path)
-  }
+  })
+
   const onResult = (isSuccess: boolean) => {
     console.log(isSuccess)
-    
-    setContentIndex(n => {
-      navigate(`/main/${paths[n + 1].path}`)
-      return n + 1
-    })
+
+    setContentIndex(n => n + 1)
   }
-  const onClick = (path: string, idx: number) => {
+  const onClick = (idx: number) => {
     setContentIndex(idx)
-    navigate(`/main/${path}`)
   }
 
   useEffect(() => {
     if (!isSignedIn()) navigate('/sign-in')
-    setContentIndex(getPathIdx())
+
+    if (contentIndex === paths.length) {
+      navigate('/main/clear')
+    } else if (contentIndex >= 0) {
+      navigate(`/main/${paths[contentIndex].path}`)
+    }
   }, [contentIndex])
   // useEffect(() => {
     
@@ -79,18 +92,19 @@ export default function Main() {
 
   return (
     isSignedIn() ? (
-      <div className='h-full p-4 flex flex-col gap-4'>
+      <>
         <HeaderMenu />
 
         <Routes>
           <Route path='*' element={<Navigate to='tutorial' />}></Route>
+          <Route path='clear' element={<Clear />}></Route>
           { paths.map(({ path }) => (<Route key={path} path={path} element={<Content onResult={onResult} />}></Route>)) }
         </Routes>
 
-        <div className="flex flex-col gap-y-4 mb-4">
-          { paths.map(({ path, name }, idx) => (<Button key={path} onClick={() => onClick(path, idx)}>{ name }</Button>)) }
-        </div>
-      </div>
+        <ButtonWrapper>
+          { paths.map(({ path, name }, idx) => (<Button key={path} onClick={() => onClick(idx)}>{ name }</Button>)) }
+        </ButtonWrapper>
+      </>
     ) : null
   )
 }
