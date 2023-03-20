@@ -4,6 +4,8 @@ export type User = {
   name: string
 }
 
+export type AuthForm = Omit<User, 'name'>
+
 export interface ContentState {
   id: number,
   path: string,

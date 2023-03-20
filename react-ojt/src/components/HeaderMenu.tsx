@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeftOnRectangleIcon, ChartBarIcon, PencilIcon } from '@heroicons/react/24/outline'
-import { signOut } from '../api/auth'
+import { signOut } from '../api'
 
 export default function HeaderMenu() {
   const navigate = useNavigate()

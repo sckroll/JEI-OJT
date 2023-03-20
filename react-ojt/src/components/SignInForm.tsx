@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom"
 import InputBox from "./InputBox"
 import Button from "./Button"
 import useUserList from "../hooks/useUserList"
-import { signIn } from "../api/auth"
 import Modal from "./Modal"
 import ModalData from "../types/ModalData"
+import { signIn } from "../api"
+import { AuthForm } from "../types/User"
 
 enum LoginFailureReasons {
   INVALID_ID,
@@ -31,7 +32,7 @@ const FormContainer = ({ children }: PropTypes) => {
 }
 
 export default function SignInForm() {
-  const [formData, setFormData] = useState({ id: '', password: '' })
+  const [formData, setFormData] = useState<AuthForm>({ id: '', password: '' })
   const [signInResult, setSignInResult] = useState<SignInResult>({ status: 'failure', reason: LoginFailureReasons.UNKNOWN });
   const [modal, setModal] = useState(false)
   const [modalData, setModalData] = useState<ModalData>({
@@ -56,11 +57,11 @@ export default function SignInForm() {
   }
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    
+
     const { status, reason } = signInResult
     if (status === 'success') {
-      signIn(formData.id)
-      navigate('/main')
+      signIn(formData)
+      navigate('/main/tutorial')
     } else {
       let content
       if (reason === LoginFailureReasons.INVALID_ID) content = '아이디를 입력해주세요.'
