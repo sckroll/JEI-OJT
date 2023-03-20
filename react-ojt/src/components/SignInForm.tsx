@@ -50,12 +50,13 @@ export default function SignInForm() {
   const userList = useUserList()
   const navigate = useNavigate()
 
-  const onChange = ({ target }: ChangeEvent) => {
-    if (target.id === 'user-id') setFormData({ ...formData, id: (target as HTMLInputElement).value })
-    if (target.id === 'user-pw') setFormData({ ...formData, password: (target as HTMLInputElement).value })
+  const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (target.id === 'user-id') setFormData({ ...formData, id: target.value })
+    if (target.id === 'user-pw') setFormData({ ...formData, password: target.value })
   }
-  const onClick = (e: MouseEvent) => {
+  const onClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    
     const { status, reason } = signInResult
     if (status === 'success') {
       signIn(formData.id)

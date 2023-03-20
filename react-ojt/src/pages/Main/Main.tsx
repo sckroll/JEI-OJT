@@ -1,10 +1,9 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
-import Content from './Content'
-import { isSignedIn } from '../../api/auth'
-import Clear from './Clear'
 import HeaderMenu from '../../components/HeaderMenu'
+import { isSignedIn } from '../../api/auth'
+import { paths } from '../../config'
 
 type PropTypes = {
   children: ReactNode
@@ -19,57 +18,36 @@ const ButtonWrapper = ({ children }: PropTypes) => {
 }
 
 export default function Main() {
-  const paths = [
-    { path: 'tutorial', name: '튜토리얼' },
-    { path: 'q1', name: '문제 1' },
-    { path: 'q2', name: '문제 2' },
-    { path: 'q3', name: '문제 3' },
-    { path: 'q4', name: '문제 4' },
-    { path: 'q5', name: '문제 5' },
-    { path: 'q6', name: '문제 6' }
-  ]
-
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const [contentIndex, setContentIndex] = useState(() => {
-    const currPath = pathname.split('/')[2]
-    return paths.findIndex(({ path }) => currPath === path)
+  const [contentIdx, setContentIdx] = useState(() => {
+    return paths.findIndex(({ path }) => path === pathname.split('/')[2])
   })
 
-  const onResult = (isSuccess: boolean) => {
-    console.log(isSuccess)
-
-    setContentIndex(n => n + 1)
-  }
   const onClick = (idx: number) => {
-    setContentIndex(idx)
+    setContentIdx(idx)
+    navigate(`/main/${idx >= paths.length ? 'clear' : paths[idx].path}`)
   }
 
   useEffect(() => {
     if (!isSignedIn()) navigate('/sign-in')
+  }, [])
+  useEffect(() => {
+    navigate(`/main/${contentIdx >= paths.length ? 'clear' : paths[contentIdx].path}`)
+  }, [contentIdx])
 
-    if (contentIndex === paths.length) {
-      navigate('/main/clear')
-    } else if (contentIndex >= 0) {
-      navigate(`/main/${paths[contentIndex].path}`)
-    }
-  }, [contentIndex])
-
-  return (
-    isSignedIn() ? (
+  if (isSignedIn()) {
+    return (
       <>
         <HeaderMenu />
-
-        <Routes>
-          <Route path='*' element={<Navigate to='tutorial' />}></Route>
-          <Route path='clear' element={<Clear />}></Route>
-          { paths.map(({ path }) => (<Route key={path} path={path} element={<Content onResult={onResult} />}></Route>)) }
-        </Routes>
-
+        <Outlet context={{ idx: contentIdx }} />
         <ButtonWrapper>
-          { paths.map(({ path, name }, idx) => (<Button key={path} onClick={() => onClick(idx)}>{ name }</Button>)) }
+          { paths.map(({ path, name }, idx) => (
+            <Button key={path} onClick={() => onClick(idx)}>{ name }</Button>
+          )) }
         </ButtonWrapper>
       </>
-    ) : null
-  )
+    )
+  }
+  return null
 }

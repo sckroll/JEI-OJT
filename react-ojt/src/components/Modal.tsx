@@ -23,10 +23,10 @@ const Overlay = ({ children, onClick }: OverlayPropTypes) => {
 }
 
 const ModalContainer = ({ modalData }: ModalPropTypes) => {
-  const stopPropagationHandler = (e: MouseEvent) => {
+  const stopPropagationHandler = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
   }
-  const buttonClickHandler = (e: MouseEvent) => {
+  const buttonClickHandler = (e: MouseEvent<HTMLButtonElement>) => {
     stopPropagationHandler(e)
     modalData.button.onClick()
   }

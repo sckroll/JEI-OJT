@@ -8,7 +8,10 @@ type PropTypes = {
 
 const Button = ({ type = 'button', children, onClick }: PropTypes) => {
   return (
-    <button type={type} onClick={onClick} className='w-full px-4 py-2 rounded-md bg-blue-50 hover:bg-blue-100 transition-colors'>
+    <button
+      type={type}
+      onClick={onClick}
+      className='w-full px-4 py-2 rounded-md bg-blue-50 hover:bg-blue-100 transition-colors'>
       { children }
     </button>
   )

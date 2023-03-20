@@ -4,6 +4,9 @@ import Main from './pages/Main'
 import SignIn from './pages/SignIn'
 import MyPage from './pages/MyPage'
 import { ContentState } from './types/User'
+import Clear from './pages/Main/Clear'
+import Content from './pages/Main/Content'
+import { paths } from './config'
 
 type PropTypes = {
   children: ReactNode
@@ -31,7 +34,13 @@ function App() {
           <Routes>
             <Route path='/*' element={<Navigate to='/sign-in' />}></Route>
             <Route path='/sign-in' element={<SignIn />}></Route>
-            <Route path='/main/*' element={<Main />}></Route>
+            <Route path='/main/*' element={<Main />}>
+              <Route path='*' element={<Navigate to='tutorial' />}></Route>
+              <Route path='clear' element={<Clear />}></Route>
+              { paths.map(({ path }) => (
+                <Route key={path} path={path} element={<Content />}></Route>
+              )) }
+            </Route>
             <Route path='/my-page' element={<MyPage />}></Route>
           </Routes>
         </BrowserRouter>
