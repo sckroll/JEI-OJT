@@ -23,7 +23,7 @@ export default function SignIn() {
     if (isSignedIn()) navigate('/main')
   }, [])
 
-  if (isSignedIn()) {
+  if (!isSignedIn()) {
     return (
       <SignInContainer>
         <JEILogo />
