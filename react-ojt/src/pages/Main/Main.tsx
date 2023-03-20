@@ -21,7 +21,8 @@ export default function Main() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const [contentIdx, setContentIdx] = useState(() => {
-    return paths.findIndex(({ path }) => path === pathname.split('/')[2])
+    const currPathIdx = paths.findIndex(({ path }) => path === pathname.split('/')[2])
+    return currPathIdx === -1 ? 0 : currPathIdx
   })
 
   const onClick = (idx: number) => {
@@ -30,9 +31,11 @@ export default function Main() {
   }
 
   useEffect(() => {
-    if (!isSignedIn()) navigate('/sign-in')
-  }, [])
-  useEffect(() => {
+    if (!isSignedIn()) {
+      navigate('/sign-in')
+      return
+    }
+    
     navigate(`/main/${contentIdx >= paths.length ? 'clear' : paths[contentIdx].path}`)
   }, [contentIdx])
 
