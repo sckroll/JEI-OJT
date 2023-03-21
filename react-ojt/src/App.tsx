@@ -3,10 +3,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Main from './pages/Main'
 import SignIn from './pages/SignIn'
 import MyPage from './pages/MyPage'
-import { ContentState } from './types/User'
+import { ContentState } from './types'
 import Clear from './pages/Main/Clear'
 import Content from './pages/Main/Content'
-import { paths } from './config'
+import { initialContents } from './config'
 
 type PropTypes = {
   children: ReactNode
@@ -37,8 +37,8 @@ function App() {
             <Route path='/main/*' element={<Main />}>
               <Route path='*' element={<Navigate to='tutorial' />}></Route>
               <Route path='clear' element={<Clear />}></Route>
-              { paths.map(({ path }) => (
-                <Route key={path} path={path} element={<Content />}></Route>
+              { initialContents.map(({ id, path }) => (
+                <Route key={id} path={path} element={<Content />}></Route>
               )) }
             </Route>
             <Route path='/my-page' element={<MyPage />}></Route>

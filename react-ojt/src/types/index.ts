@@ -25,3 +25,15 @@ export type UserContentStats = {
   id: string,
   contentStates: ContentState[]
 }
+
+export type DBMap = Map<string, ContentState[]>
+
+export type ModalData = {
+  title: string,
+  content: string,
+  button: {
+    text: string,
+    onClick: () => void
+  },
+  overlay: () => void
+}

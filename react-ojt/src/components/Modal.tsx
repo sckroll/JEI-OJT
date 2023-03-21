@@ -1,7 +1,7 @@
 import { MouseEvent, ReactNode } from "react"
 import { createPortal } from "react-dom"
-import ModalData from "../types/ModalData"
 import Button from "./Button"
+import { ModalData } from "../types"
 
 type OverlayPropTypes = {
   children: ReactNode

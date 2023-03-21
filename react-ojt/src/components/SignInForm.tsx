@@ -4,9 +4,8 @@ import { isAxiosError } from "axios"
 import InputBox from "./InputBox"
 import Button from "./Button"
 import Modal from "./Modal"
-import ModalData from "../types/ModalData"
-import { signIn } from "../api"
-import { AuthForm } from "../types/User"
+import { authCheck, signIn } from "../api"
+import { AuthForm, ModalData } from "../types"
 
 type PropTypes = {
   children: ReactNode
@@ -61,6 +60,11 @@ export default function SignInForm() {
   }
 
   useEffect(() => {
+    // const chackAuthState = async () => {
+    //   const authCheckResult = await authCheck()
+    //   setIsSignedIn(!!authCheckResult)
+    // }
+    // chackAuthState()
     if (isSignedIn) navigate('/main/tutorial')
   }, [isSignedIn])
 

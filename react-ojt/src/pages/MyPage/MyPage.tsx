@@ -4,7 +4,7 @@ import { authCheck } from "../../api"
 import HeaderMenu from "../../components/HeaderMenu"
 
 export default function MyPage() {
-  const [isSignedIn, setIsSignedIn] = useState(false)
+  const [isSignedIn, setIsSignedIn] = useState<string | null>(null)
   const navigate = useNavigate()
   const circleGraphEl = useRef(null)
 

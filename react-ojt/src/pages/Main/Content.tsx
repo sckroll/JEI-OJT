@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useOutletContext } from "react-router-dom"
-import { authCheck } from "../../api"
-import { paths } from "../../config"
+import { initialContents } from "../../config"
 
 type PropTypes = {
   idx: number
@@ -20,11 +19,6 @@ export default function Content() {
   }
 
   useEffect(() => {
-    if (!authCheck()) {
-      navigate('/sign-in')
-      return
-    }
-
     window.addEventListener('message', messageHandler)
     return () => {
       window.removeEventListener('message', messageHandler)
@@ -34,13 +28,12 @@ export default function Content() {
     setContentIdx(idx)
   }, [idx])
   useEffect(() => {
-    navigate(`/main/${contentIdx >= paths.length ? 'clear' : paths[contentIdx].path}`)
+    navigate(`/main/${contentIdx >= initialContents.length ? 'clear' : initialContents[contentIdx].path}`)
   }, [contentIdx])
   
-  if (contentIdx < paths.length) {
-    return (
-      <iframe src={`/contents/${paths[contentIdx].path}/index.html`} className="w-full h-full"></iframe>
-    )
-  }
-  return null
+  if (contentIdx >= initialContents.length) return null
+  return (
+    <iframe src={`/contents/${initialContents[contentIdx].path}/index.html`} className="w-full h-full"></iframe>
+  )
+  
 }
