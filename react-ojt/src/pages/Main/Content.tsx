@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useOutletContext } from "react-router-dom"
-import { isSignedIn } from "../../api/auth"
+import { authCheck } from "../../api"
 import { paths } from "../../config"
 
 type PropTypes = {
@@ -20,7 +20,7 @@ export default function Content() {
   }
 
   useEffect(() => {
-    if (!isSignedIn()) {
+    if (!authCheck()) {
       navigate('/sign-in')
       return
     }

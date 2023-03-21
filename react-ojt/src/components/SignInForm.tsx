@@ -60,8 +60,7 @@ export default function SignInForm() {
 
     const { status, reason } = signInResult
     if (status === 'success') {
-      signIn(formData)
-      navigate('/main/tutorial')
+      onSignIn(formData)
     } else {
       let content
       if (reason === LoginFailureReasons.INVALID_ID) content = '아이디를 입력해주세요.'
@@ -75,6 +74,15 @@ export default function SignInForm() {
         content
       })
       setModal(true)
+    }
+  }
+  const onSignIn = async (formData: AuthForm) => {
+    try {
+      signIn(formData)
+      navigate('/main/tutorial')
+    } catch (e) {
+      console.error(e)
+      alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
     }
   }
   

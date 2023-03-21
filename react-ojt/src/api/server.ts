@@ -6,7 +6,7 @@ const AUTH_KEY = 'JEI_AUTH'
 const DB_KEY = 'JEI_DB'
 
 export const initServer = (instance: AxiosInstance) => {
-  const mock = new MockAdapter(instance)
+  const mock = new MockAdapter(instance, { delayResponse: 1000 })
 
   const _signIn = (id: string) => {
     localStorage.setItem(AUTH_KEY, id)
@@ -14,30 +14,24 @@ export const initServer = (instance: AxiosInstance) => {
   const _signOut = () => {
     localStorage.removeItem(AUTH_KEY)
   }
+  const _getCurrUserId = () => {
+    return localStorage.getItem(AUTH_KEY)
+  }
 
-  mock.onPost('/signIn').reply(({ data }: AxiosRequestConfig<string>) => {
-    try {
-      if (!data) return [500]
-      
-      const parsed: AuthForm = JSON.parse(data)
-      _signIn(parsed.id)
-      
-      return [200]
-    } catch (e) {
-      console.error(e);
-      return [500]
-    }
+  mock.onPost('/sign-in').reply(({ data }: AxiosRequestConfig<string>) => {
+    if (!data) return [500]
+    
+    const parsed: AuthForm = JSON.parse(data)
+    _signIn(parsed.id)
+    
+    return [200]
   })
-  mock.onGet('/signOut').reply(() => {
+  mock.onGet('/sign-out').reply(() => {
     _signOut()
     return [200]
   })
-}
-
-export const isSignedIn = () => {
-  return !!localStorage.getItem(AUTH_KEY)
-}
-
-export const getCurrUserId = () => {
-  return localStorage.getItem(AUTH_KEY) ?? ''
+  mock.onGet('/auth-check').reply<boolean>(() => {
+    const userId = _getCurrUserId()
+    return [200, !!userId]
+  })
 }

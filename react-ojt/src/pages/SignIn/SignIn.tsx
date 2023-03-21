@@ -1,6 +1,6 @@
-import { ReactNode, useEffect } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { isSignedIn } from "../../api/auth"
+import { authCheck } from "../../api"
 import JEILogo from "../../components/JEILogo"
 import SignInForm from "../../components/SignInForm"
 
@@ -17,19 +17,23 @@ const SignInContainer = ({ children }: PropTypes) => {
 }
 
 export default function SignIn() {
+  const [isSignedIn, setIsSignedIn] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isSignedIn()) navigate('/main')
+    const chackAuthState = async () => {
+      const authCheckResult = await authCheck()
+      setIsSignedIn(authCheckResult)
+    }
+    chackAuthState()
+    if (isSignedIn) navigate('/main');
   }, [])
 
-  if (!isSignedIn()) {
-    return (
-      <SignInContainer>
-        <JEILogo />
-        <SignInForm />
-      </SignInContainer>
-    )
-  }
-  return null
+  if (isSignedIn) return null
+  return (
+    <SignInContainer>
+      <JEILogo />
+      <SignInForm />
+    </SignInContainer>
+  )
 }

@@ -12,10 +12,15 @@ export default function HeaderMenu() {
   const mainPageRouteHandler = () => {
     navigate('/main/tutorial')
   }
-  const logoutHandler = () => {
-    if (confirm('로그아웃 하시겠어요?')) {;
-      signOut()
-      navigate('/sign-in')
+  const logoutHandler = async () => {
+    try {
+      if (confirm('로그아웃 하시겠어요?')) {;
+        signOut()
+        navigate('/sign-in')
+      }
+    } catch (e) {
+      console.error(e)
+      alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
     }
   }
 

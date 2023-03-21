@@ -1,17 +1,24 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { isSignedIn } from "../../api/auth"
+import { authCheck } from "../../api"
 import HeaderMenu from "../../components/HeaderMenu"
 
 export default function MyPage() {
+  const [isSignedIn, setIsSignedIn] = useState(false)
   const navigate = useNavigate()
   const circleGraphEl = useRef(null)
 
   useEffect(() => {
-    if (!isSignedIn()) navigate('/sign-in')
+    const chackAuthState = async () => {
+      const authCheckResult = await authCheck()
+      setIsSignedIn(authCheckResult)
+    }
+    chackAuthState()
+    if (!isSignedIn) navigate('/sign-in')
   }, [])
 
-  if (isSignedIn()) {
+  if (!isSignedIn) return null
+  return (
     <>
       <HeaderMenu />
 
@@ -34,6 +41,5 @@ export default function MyPage() {
         </svg>
       </div>
     </>
-  }
-  return null
+  )
 }
