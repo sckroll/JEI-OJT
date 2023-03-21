@@ -24,7 +24,7 @@ export default function Main() {
     const currPathIdx = paths.findIndex(({ path }) => path === pathname.split('/')[2])
     return currPathIdx === -1 ? 0 : currPathIdx
   })
-  const [isSignedIn, setIsSignedIn] = useState(false)
+  const [isSignedIn, setIsSignedIn] = useState(true)
 
   const onClick = (idx: number) => {
     setContentIdx(idx)
@@ -37,15 +37,13 @@ export default function Main() {
       setIsSignedIn(authCheckResult)
     }
     chackAuthState()
-    if (!isSignedIn) {
-      navigate('/sign-in')
-      return
-    }
     
     navigate(`/main/${contentIdx >= paths.length ? 'clear' : paths[contentIdx].path}`)
   }, [contentIdx])
+  useEffect(() => {
+    if (!isSignedIn) navigate('/sign-in')
+  }, [isSignedIn])
 
-  if (!isSignedIn) return null
   return (
     <>
       <HeaderMenu />

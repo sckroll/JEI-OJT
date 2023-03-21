@@ -1,26 +1,15 @@
 import { ChangeEvent, MouseEvent, ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { isAxiosError } from "axios"
 import InputBox from "./InputBox"
 import Button from "./Button"
-import useUserList from "../hooks/useUserList"
 import Modal from "./Modal"
 import ModalData from "../types/ModalData"
 import { signIn } from "../api"
 import { AuthForm } from "../types/User"
 
-enum LoginFailureReasons {
-  INVALID_ID,
-  INVALID_PASSWORD,
-  USER_NOT_FOUND,
-  WRONG_PASSWORD,
-  UNKNOWN
-}
 type PropTypes = {
   children: ReactNode
-}
-type SignInResult = {
-  status: 'success' | 'failure',
-  reason?: LoginFailureReasons
 }
 
 const FormContainer = ({ children }: PropTypes) => {
@@ -33,7 +22,7 @@ const FormContainer = ({ children }: PropTypes) => {
 
 export default function SignInForm() {
   const [formData, setFormData] = useState<AuthForm>({ id: '', password: '' })
-  const [signInResult, setSignInResult] = useState<SignInResult>({ status: 'failure', reason: LoginFailureReasons.UNKNOWN });
+  const [isSignedIn, setIsSignedIn] = useState(false)
   const [modal, setModal] = useState(false)
   const [modalData, setModalData] = useState<ModalData>({
     title: '로그인 실패',
@@ -48,68 +37,32 @@ export default function SignInForm() {
       setModal(false)
     },
   })
-  const userList = useUserList()
   const navigate = useNavigate()
 
   const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (target.id === 'user-id') setFormData({ ...formData, id: target.value })
     if (target.id === 'user-pw') setFormData({ ...formData, password: target.value })
   }
-  const onClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const onClick = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    const { status, reason } = signInResult
-    if (status === 'success') {
-      onSignIn(formData)
-    } else {
-      let content
-      if (reason === LoginFailureReasons.INVALID_ID) content = '아이디를 입력해주세요.'
-      else if (reason === LoginFailureReasons.INVALID_PASSWORD) content = '비밀번호를 입력해주세요.'
-      else if (reason === LoginFailureReasons.USER_NOT_FOUND) content = '올바르지 않은 아이디에요.'
-      else if (reason === LoginFailureReasons.WRONG_PASSWORD) content = '비밀번호를 확인해주세요.'
-      else content = '잠시 후에 다시 시도해주세요.'
+    try {
+      const response = await signIn(formData)
+      setIsSignedIn(response)
+    } catch (e) {
+      console.error(e)
 
-      setModalData({
-        ...modalData,
-        content
-      })
+      let content = '서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.'
+      if (isAxiosError(e) && e.response?.data) content = e.response.data
+
+      setModalData({ ...modalData, content })
       setModal(true)
     }
   }
-  const onSignIn = async (formData: AuthForm) => {
-    try {
-      signIn(formData)
-      navigate('/main/tutorial')
-    } catch (e) {
-      console.error(e)
-      alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
-    }
-  }
-  
+
   useEffect(() => {
-    if (!formData.id) {
-      setSignInResult({ status: 'failure', reason: LoginFailureReasons.INVALID_ID })
-      return
-    }
-    if (!formData.password) {
-      setSignInResult({ status: 'failure', reason: LoginFailureReasons.INVALID_PASSWORD })
-      return
-    }
-
-    const userData = userList?.find(user => user.id === formData.id)
-    if (!userData) {
-      setSignInResult({ status: 'failure', reason: LoginFailureReasons.USER_NOT_FOUND })
-      return
-    }
-
-    const isWrongPassword = userData.password !== formData.password
-    if (isWrongPassword) {
-      setSignInResult({ status: 'failure', reason: LoginFailureReasons.WRONG_PASSWORD })
-      return
-    }
-
-    setSignInResult({ status: 'success' })
-  }, [formData])
+    if (isSignedIn) navigate('/main/tutorial')
+  }, [isSignedIn])
 
   return (
     <>
@@ -118,7 +71,7 @@ export default function SignInForm() {
         <InputBox id="user-pw" type="password" placeholder="패스워드" onChange={onChange} />
         <Button type="submit" onClick={onClick}>로그인</Button>
       </FormContainer>
-      {modal && <Modal modalData={modalData} />}
+      { modal && <Modal modalData={modalData} /> }
     </>
   )
 }

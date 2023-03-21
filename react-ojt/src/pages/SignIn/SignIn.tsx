@@ -1,6 +1,4 @@
-import { ReactNode, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { authCheck } from "../../api"
+import { ReactNode } from "react"
 import JEILogo from "../../components/JEILogo"
 import SignInForm from "../../components/SignInForm"
 
@@ -17,19 +15,6 @@ const SignInContainer = ({ children }: PropTypes) => {
 }
 
 export default function SignIn() {
-  const [isSignedIn, setIsSignedIn] = useState(false)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const chackAuthState = async () => {
-      const authCheckResult = await authCheck()
-      setIsSignedIn(authCheckResult)
-    }
-    chackAuthState()
-    if (isSignedIn) navigate('/main');
-  }, [])
-
-  if (isSignedIn) return null
   return (
     <SignInContainer>
       <JEILogo />

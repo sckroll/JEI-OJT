@@ -13,12 +13,6 @@ const initialContentsData: ContentState[] = [
   { id: 6, path: 'q6', name: '문제 6', state: 'unknown' }
 ]
 
-export const getUserList = async () => {
-  const response = await fetch('users.json')
-  const userList = await response.json()
-  return userList
-}
-
 const parseDB = () => {
   const serializedDB = localStorage.getItem(DB_KEY)
   if (serializedDB) {

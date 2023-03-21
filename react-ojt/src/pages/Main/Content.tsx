@@ -31,11 +31,11 @@ export default function Content() {
     }
   }, [])
   useEffect(() => {
-    navigate(`/main/${contentIdx >= paths.length ? 'clear' : paths[contentIdx].path}`)
-  }, [contentIdx])
-  useEffect(() => {
     setContentIdx(idx)
   }, [idx])
+  useEffect(() => {
+    navigate(`/main/${contentIdx >= paths.length ? 'clear' : paths[contentIdx].path}`)
+  }, [contentIdx])
   
   if (contentIdx < paths.length) {
     return (
