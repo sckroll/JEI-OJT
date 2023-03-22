@@ -9,7 +9,9 @@ export const signIn = async (authForm: AuthForm) => {
   return !!response
 }
 
-export const signOut = () => instance.get('/sign-out')
+export const signOut = async () => {
+  await instance.get('/sign-out')
+}
 
 export const authCheck = async () => {
   const { data } = await instance.get<string | null>('/auth-check')
@@ -22,7 +24,11 @@ export const getContentState = async () => {
 }
 
 export const updateContentState = async (updatedState: ContentState[]) => {
-  await instance.post('/contents', updatedState)
+  await instance.put('/contents', updatedState)
+}
+
+export const resetContentState = async () => {
+  await instance.post('/contents/reset')
 }
 
 initServer(instance)
