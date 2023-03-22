@@ -1,16 +1,19 @@
-import { createRef, useEffect, useMemo, useState } from "react"
+import { createRef, useContext, useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import HeaderMenu from "../../components/HeaderMenu"
 import { authCheck, getContentState, resetContentState } from "../../api"
 import { ContentState, User } from "../../types"
 import Button from "../../components/Button"
 import { userPlaceholder } from "../../config"
+import ContentContext from "../../context"
 
 export default function MyPage() {
   const [userInfo, setUserInfo] = useState<User | null>(userPlaceholder)
-  const [contentState, setContentState] = useState<ContentState[]>()
+  // const [contentState, setContentState] = useState<ContentState[]>()
   const [strokeDasharray, setStrokeDasharray] = useState(0)
   const navigate = useNavigate()
+
+  const contentState = useContext(ContentContext)
 
   const successRef = createRef<SVGPathElement>()
   const failureRef = createRef<SVGPathElement>()
@@ -54,8 +57,8 @@ export default function MyPage() {
       if (!user) return
       setUserInfo(user)
       
-      const myContentState = await getContentState()
-      setContentState(myContentState)
+      // const myContentState = await getContentState()
+      // setContentState(myContentState)
     }
     chackAuthState()
     

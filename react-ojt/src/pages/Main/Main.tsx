@@ -1,10 +1,11 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
 import HeaderMenu from '../../components/HeaderMenu'
 import { initialContents, userPlaceholder } from '../../config'
 import { authCheck, getContentState } from '../../api'
 import { ContentState, User } from '../../types'
+import ContentContext from '../../context'
 
 type PropTypes = {
   children: ReactNode
@@ -26,7 +27,8 @@ export default function Main() {
     return currPathIdx === -1 ? 0 : currPathIdx
   })
   const [userInfo, setUserInfo] = useState<User | null>(userPlaceholder)
-  const [contentState, setContentState] = useState<ContentState[]>()
+  // const [contentState, setContentState] = useState<ContentState[]>(initialContents)
+  const contentState = useContext(ContentContext)
 
   const onClick = (idx: number) => {
     setContentIdx(idx)
@@ -39,8 +41,8 @@ export default function Main() {
       setUserInfo(user)
       if (!user) return
 
-      const myContentState = await getContentState()
-      setContentState(myContentState)
+      // const myContentState = await getContentState()
+      // setContentState(myContentState)
     }
     chackAuthState()
     
@@ -49,13 +51,13 @@ export default function Main() {
   useEffect(() => {
     if (!userInfo) navigate('/sign-in')
   }, [userInfo])
-
+  
   return (
     <>
       <HeaderMenu />
       <Outlet context={{ idx: contentIdx }} />
       <ButtonWrapper>
-        { contentState && contentState.map(({ id, name, state }, idx) => (
+        { contentState.map(({ id, name, state }, idx) => (
           <Button
             key={id}
             isCurrent={id === contentIdx}
