@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { AuthForm, ContentState, DBMap, SignInErrorReason } from '../types'
+import { AuthForm, ContentState, DBMap, SignInErrorReason, User } from '../types'
 import { userList, initialContents } from '../config'
 
 const AUTH_KEY = 'JEI_AUTH'
@@ -74,9 +74,10 @@ export const initServer = (instance: AxiosInstance) => {
     return [200]
   })
 
-  mock.onGet('/auth-check').reply<string | null>(() => {
+  mock.onGet('/auth-check').reply<User | null>(() => {
     const userId = _getCurrUserId()
-    return [200, userId]
+    const userData = userList.find(user => user.id === userId)
+    return [200, userData]
   })
 
   mock.onGet('/contents').reply(async () => {

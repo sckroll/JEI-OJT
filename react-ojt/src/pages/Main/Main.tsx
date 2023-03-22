@@ -2,9 +2,9 @@ import { ReactNode, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
 import HeaderMenu from '../../components/HeaderMenu'
-import { initialContents } from '../../config'
+import { initialContents, userPlaceholder } from '../../config'
 import { authCheck, getContentState } from '../../api'
-import { ContentState } from '../../types'
+import { ContentState, User } from '../../types'
 
 type PropTypes = {
   children: ReactNode
@@ -25,7 +25,7 @@ export default function Main() {
     const currPathIdx = initialContents.findIndex(({ path }) => path === pathname.split('/')[2])
     return currPathIdx === -1 ? 0 : currPathIdx
   })
-  const [isSignedIn, setIsSignedIn] = useState<string | null>('id')
+  const [userInfo, setUserInfo] = useState<User | null>(userPlaceholder)
   const [contentState, setContentState] = useState<ContentState[]>()
 
   const onClick = (idx: number) => {
@@ -35,9 +35,9 @@ export default function Main() {
 
   useEffect(() => {
     const chackAuthState = async () => {
-      const id = await authCheck()
-      setIsSignedIn(id)
-      if (!id) return
+      const user = await authCheck()
+      setUserInfo(user)
+      if (!user) return
 
       const myContentState = await getContentState()
       setContentState(myContentState)
@@ -47,8 +47,8 @@ export default function Main() {
     navigate(`/main/${contentIdx >= initialContents.length ? 'clear' : initialContents[contentIdx].path}`)
   }, [contentIdx])
   useEffect(() => {
-    if (!isSignedIn) navigate('/sign-in')
-  }, [isSignedIn])
+    if (!userInfo) navigate('/sign-in')
+  }, [userInfo])
 
   return (
     <>

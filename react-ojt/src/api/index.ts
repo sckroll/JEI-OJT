@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AuthForm, ContentState } from '../types'
+import { AuthForm, ContentState, User } from '../types'
 import { initServer } from './server'
 
 const instance = axios.create()
@@ -14,7 +14,7 @@ export const signOut = async () => {
 }
 
 export const authCheck = async () => {
-  const { data } = await instance.get<string | null>('/auth-check')
+  const { data } = await instance.get<User | null>('/auth-check')
   return data
 }
 

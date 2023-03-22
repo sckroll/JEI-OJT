@@ -12,12 +12,18 @@ export const initialContents: ContentState[] = [
 
 export const userList: User[] = [
   {
-    "id": "test",
-    "password": "test1234",
-    "name": "김성찬"
+    id: "test",
+    password: "test1234",
+    name: "김성찬"
   }, {
-    "id": "admin",
-    "password": "admin",
-    "name": "관리자"
+    id: "admin",
+    password: "admin",
+    name: "관리자"
   }
 ]
+
+export const userPlaceholder: User = {
+  id: '',
+  password: '',
+  name: ''
+}

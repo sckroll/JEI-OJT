@@ -2,11 +2,12 @@ import { createRef, useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import HeaderMenu from "../../components/HeaderMenu"
 import { authCheck, getContentState, resetContentState } from "../../api"
-import { ContentState } from "../../types"
+import { ContentState, User } from "../../types"
 import Button from "../../components/Button"
+import { userPlaceholder } from "../../config"
 
 export default function MyPage() {
-  const [isSignedIn, setIsSignedIn] = useState<string | null>('id')
+  const [userInfo, setUserInfo] = useState<User | null>(userPlaceholder)
   const [contentState, setContentState] = useState<ContentState[]>()
   const [strokeDasharray, setStrokeDasharray] = useState(0)
   const navigate = useNavigate()
@@ -49,9 +50,9 @@ export default function MyPage() {
 
   useEffect(() => {
     const chackAuthState = async () => {
-      const id = await authCheck()
-      setIsSignedIn(id)
-      if (!id) return
+      const user = await authCheck()
+      if (!user) return
+      setUserInfo(user)
       
       const myContentState = await getContentState()
       setContentState(myContentState)
@@ -62,8 +63,8 @@ export default function MyPage() {
     setStrokeDasharray(failureRef.current?.getTotalLength() ?? 0)
   }, [contentState])
   useEffect(() => {
-    if (!isSignedIn) navigate('/sign-in')
-  }, [isSignedIn])
+    if (!userInfo) navigate('/sign-in')
+  }, [userInfo])
 
   return (
     <>
@@ -71,7 +72,7 @@ export default function MyPage() {
 
       <div className="h-full flex flex-col justify-around">
         <div className="text-center">
-          <p>김성찬님은 총 {totalCount}문제 중 <strong>{solvedCount}문제</strong>를 풀었어요.</p>
+          <p>{userInfo?.name}님은 총 {totalCount}문제 중 <strong>{solvedCount}문제</strong>를 풀었어요.</p>
           <p>아직 풀지 못한 문제는 <strong>{unsolvedCount}문제</strong>가 있어요.</p>
           <p className="text-xs text-slate-400 mt-1">성취도 = (맞은 문제 수 / 총 문제 수) x 100</p>
         </div>

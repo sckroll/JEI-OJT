@@ -1,8 +1,12 @@
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeftOnRectangleIcon, ChartBarIcon, PencilIcon } from '@heroicons/react/24/outline'
-import { signOut } from '../api'
+import { authCheck, signOut } from '../api'
+import { User } from '../types'
+import { userPlaceholder } from '../config'
 
 export default function HeaderMenu() {
+  const [userInfo, setUserInfo] = useState<User | null>(userPlaceholder)
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -24,11 +28,17 @@ export default function HeaderMenu() {
     }
   }
 
+  useEffect(() => {
+    const getUserData = async () => {
+      const user = await authCheck()
+      setUserInfo(user)
+    }
+    getUserData()
+  }, [])
+
   return (
     <div className='flex justify-between items-center'>
-    <p>
-      <strong className='font-bold'>김성찬</strong>님, 안녕하세요!
-    </p>
+    <p><strong className='font-bold'>{ userInfo?.name }</strong>님, 안녕하세요!</p>
     <div className='flex gap-x-2'>
       {
         pathname === '/my-page' ? (

@@ -21,11 +21,6 @@ export interface ContentState {
   state: 'success' | 'failure' | 'unknown'
 }
 
-export type UserContentStats = {
-  id: string,
-  contentStates: ContentState[]
-}
-
 export type DBMap = Map<string, ContentState[]>
 
 export type ModalData = {
