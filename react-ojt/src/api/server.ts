@@ -89,9 +89,12 @@ export const initServer = (instance: AxiosInstance) => {
 
   mock.onPost('/contents').reply(async ({ data }: AxiosRequestConfig<string>) => {
     if (!data) return [500]
+
+    const id = _getCurrUserId()
+    if (!id) return [500]
     
-    const { id, contentState } = JSON.parse(data)
-    _updateContentsData(id, contentState)
+    const updatedState = JSON.parse(data)
+    _updateContentsData(id, updatedState)
 
     return [200]
   })

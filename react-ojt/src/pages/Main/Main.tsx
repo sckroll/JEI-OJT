@@ -12,7 +12,7 @@ type PropTypes = {
 
 const ButtonWrapper = ({ children }: PropTypes) => {
   return (
-    <div className="flex flex-col gap-y-3 mb-4">
+    <div className="grid grid-cols-2 gap-3 mb-4">
       { children }
     </div>
   )
@@ -39,7 +39,7 @@ export default function Main() {
       setIsSignedIn(id)
       if (!id) return
 
-      const myContentState = await getContentState(id)
+      const myContentState = await getContentState()
       setContentState(myContentState)
     }
     chackAuthState()
@@ -55,8 +55,16 @@ export default function Main() {
       <HeaderMenu />
       <Outlet context={{ idx: contentIdx }} />
       <ButtonWrapper>
-        { contentState && contentState.map(({ id, name }, idx) => (
-          <Button key={id} isCurrent={id === contentIdx} onClick={() => onClick(idx)}>{ name }</Button>
+        { contentState && contentState.map(({ id, name, state }, idx) => (
+          <Button
+            key={id}
+            isCurrent={id === contentIdx}
+            isSuccess={state === 'success'}
+            isFailure={state === 'failure'}
+            fullWidth={id === 0}
+            onClick={() => onClick(idx)}>
+              { name }
+          </Button>
         )) }
       </ButtonWrapper>
     </>

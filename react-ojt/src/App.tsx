@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Main from './pages/Main'
 import SignIn from './pages/SignIn'
@@ -7,12 +7,13 @@ import { ContentState } from './types'
 import Clear from './pages/Main/Clear'
 import Content from './pages/Main/Content'
 import { initialContents } from './config'
+import { getContentState } from './api'
 
 type PropTypes = {
   children: ReactNode
 }
 
-// const ContentContext = createContext<ContentState[]>([])
+// const ContentContext = createContext<ContentState[]>(initialContents)
 
 const Container = ({ children }: PropTypes) => {
   return (
@@ -27,8 +28,24 @@ const Container = ({ children }: PropTypes) => {
 }
 
 function App() {
+  const [contentState, setContentState] = useState<ContentState[]>([])
+
+  useEffect(() => {
+    const initContents = async () => {
+      try {
+        const myContentState = await getContentState()
+        setContentState(myContentState)
+      } catch (e) {
+        console.error(e)
+        alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
+      }
+    }
+    initContents()
+  }, [])
+  
+
   return (
-    // <ContentContext.Provider value={[]}>
+    // <ContentContext.Provider value={contentState}>
       <Container>
         <BrowserRouter>
           <Routes>

@@ -16,13 +16,13 @@ export const authCheck = async () => {
   return data
 }
 
-export const getContentState = async (id: string) => {
-  const { data } = await instance.get<ContentState[]>('/contents', { params: id })
+export const getContentState = async () => {
+  const { data } = await instance.get<ContentState[]>('/contents')
   return data
 }
 
-export const setContentState = async (id: string, contentState: ContentState[]) => {
-  await instance.post('/contents', { id, contentState })
+export const updateContentState = async (updatedState: ContentState[]) => {
+  await instance.post('/contents', updatedState)
 }
 
 initServer(instance)
