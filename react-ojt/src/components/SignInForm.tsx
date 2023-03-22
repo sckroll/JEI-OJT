@@ -60,11 +60,11 @@ export default function SignInForm() {
   }
 
   useEffect(() => {
-    // const chackAuthState = async () => {
-    //   const authCheckResult = await authCheck()
-    //   setIsSignedIn(!!authCheckResult)
-    // }
-    // chackAuthState()
+    const chackAuthState = async () => {
+      const authCheckResult = await authCheck()
+      setIsSignedIn(!!authCheckResult)
+    }
+    chackAuthState()
     if (isSignedIn) navigate('/main/tutorial')
   }, [isSignedIn])
 

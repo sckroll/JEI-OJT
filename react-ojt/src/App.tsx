@@ -28,21 +28,20 @@ const Container = ({ children }: PropTypes) => {
 }
 
 function App() {
-  const [contentState, setContentState] = useState<ContentState[]>([])
+  // const [contentState, setContentState] = useState<ContentState[]>([])
 
-  useEffect(() => {
-    const initContents = async () => {
-      try {
-        const myContentState = await getContentState()
-        setContentState(myContentState)
-      } catch (e) {
-        console.error(e)
-        alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
-      }
-    }
-    initContents()
-  }, [])
-  
+  // useEffect(() => {
+  //   const initContents = async () => {
+  //     try {
+  //       const myContentState = await getContentState()
+  //       setContentState(myContentState)
+  //     } catch (e) {
+  //       console.error(e)
+  //       alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
+  //     }
+  //   }
+  //   initContents()
+  // }, [])
 
   return (
     // <ContentContext.Provider value={contentState}>
