@@ -15,9 +15,12 @@ const Button = ({
 }: PropTypes) => {;
   let buttonColor = 'bg-blue-50 hover:bg-blue-100'
 
-  if (isSuccess) buttonColor = 'bg-teal-600 hover:bg-teal-700 text-white'
-  else if (isFailure) buttonColor = 'bg-red-700 hover:bg-red-800 text-white'
-  else if (isCurrent) buttonColor = 'bg-slate-500 text-white cursor-default'
+  if (isCurrent) {
+    buttonColor = 'bg-slate-500 text-white cursor-default'
+  } else {
+    if (isSuccess) buttonColor = 'bg-teal-600 hover:bg-teal-700 text-white'
+    else if (isFailure) buttonColor = 'bg-red-700 hover:bg-red-800 text-white'
+  }
 
   return (
     <button
