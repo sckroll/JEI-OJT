@@ -1,23 +1,10 @@
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import Button from '../../components/Button'
 import HeaderMenu from '../../components/HeaderMenu'
 import { initialContents, userPlaceholder } from '../../config'
-import { authCheck, getContentState } from '../../api'
-import { ContentState, User } from '../../types'
-import ContentContext from '../../context'
-
-type PropTypes = {
-  children: ReactNode
-}
-
-const ButtonWrapper = ({ children }: PropTypes) => {
-  return (
-    <div className="grid grid-cols-2 gap-3 mb-4">
-      { children }
-    </div>
-  )
-}
+import { authCheck } from '../../api'
+import { User } from '../../types'
+import FooterButtons from '../../components/FooterButtons'
 
 export default function Main() {
   const navigate = useNavigate()
@@ -27,8 +14,6 @@ export default function Main() {
     return currPathIdx === -1 ? 0 : currPathIdx
   })
   const [userInfo, setUserInfo] = useState<User | null>(userPlaceholder)
-  // const [contentState, setContentState] = useState<ContentState[]>(initialContents)
-  const contentState = useContext(ContentContext)
 
   const onClick = (idx: number) => {
     setContentIdx(idx)
@@ -40,9 +25,6 @@ export default function Main() {
       const user = await authCheck()
       setUserInfo(user)
       if (!user) return
-
-      // const myContentState = await getContentState()
-      // setContentState(myContentState)
     }
     chackAuthState()
     
@@ -56,19 +38,7 @@ export default function Main() {
     <>
       <HeaderMenu />
       <Outlet context={{ idx: contentIdx }} />
-      <ButtonWrapper>
-        { contentState.map(({ id, name, state }, idx) => (
-          <Button
-            key={id}
-            isCurrent={id === contentIdx}
-            isSuccess={state === 'success'}
-            isFailure={state === 'failure'}
-            fullWidth={id === 0}
-            onClick={() => onClick(idx)}>
-              { name }
-          </Button>
-        )) }
-      </ButtonWrapper>
+      <FooterButtons contentIdx={contentIdx} onClick={onClick} />
     </>
   )
 }

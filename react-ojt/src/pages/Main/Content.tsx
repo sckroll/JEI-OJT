@@ -41,6 +41,6 @@ export default function Content() {
   
   if (contentIdx >= initialContents.length) return null
   return (
-    <iframe src={`/contents/${initialContents[contentIdx].path}/index.html`} className="w-full h-full"></iframe>
+    <iframe src={`/contents/${initialContents[contentIdx].path}/index.html`} className="w-full h-2/3"></iframe>
   )
 }
