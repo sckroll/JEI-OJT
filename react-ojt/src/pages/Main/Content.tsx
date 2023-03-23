@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useNavigate, useOutletContext } from "react-router-dom"
 import { getContentState, updateContentState } from "../../api"
 import { initialContents } from "../../config"
@@ -13,7 +13,6 @@ type OutletContextProps = {
 export default function Content({ contentIdx }: PropTypes) {
   const navigate = useNavigate()
   const { onClick } = useOutletContext<OutletContextProps>()
-  // const [contentIdx, setContentIdx] = useState(idx)
 
   const messageHandler = async (e: MessageEvent) => {
     if (e.origin !== location.origin) return
@@ -22,8 +21,6 @@ export default function Content({ contentIdx }: PropTypes) {
         const prevContentState = await getContentState()
         prevContentState[contentIdx].state = e.data.isSuccess ? 'success' : 'failure'
         await updateContentState(prevContentState)
-        // setContentIdx(n => n + 1)
-        // navigate(`/main/${contentIdx + 1 >= initialContents.length ? 'clear' : initialContents[contentIdx + 1].path}`)
         onClick(contentIdx + 1)
       } catch (e) {
         console.error(e)
@@ -32,9 +29,6 @@ export default function Content({ contentIdx }: PropTypes) {
     }
   }
   
-  // useEffect(() => {
-  //   setContentIdx(idx)
-  // }, [idx])
   useEffect(() => {
     window.addEventListener('message', messageHandler)
     navigate(`/main/${contentIdx >= initialContents.length ? 'clear' : initialContents[contentIdx].path}`)

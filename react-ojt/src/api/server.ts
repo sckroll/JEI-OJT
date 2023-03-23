@@ -64,7 +64,7 @@ export const initServer = (instance: AxiosInstance) => {
     // 첫 로그인 시 로컬 스토리지에 DB 생성
     const id = _getCurrUserId()
     _updateContentsData(id!)
-    
+
     const status = errorMessage ? 500 : 200
     return [status, errorMessage]
   })

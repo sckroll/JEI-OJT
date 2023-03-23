@@ -46,7 +46,6 @@ export default function ContentStats() {
         <p>{userInfo?.name}님은 총 {totalCount}문제 중 <strong>{solvedCount}문제</strong>를 풀었어요.</p>
         <p>아직 풀지 못한 문제는 <strong>{unsolvedCount}문제</strong>가 있어요.</p>
         <p className="text-xs text-slate-400 mt-1">성취도 = (맞은 문제 수 / 총 문제 수) x 100</p>
-        {/* <p>문제 푼 시간: 0초</p> */}
       </div>
 
       <DonutChart successPercentage={successPercentage} solvedPercentage={solvedPercentage} />
