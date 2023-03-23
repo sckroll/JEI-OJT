@@ -4,13 +4,16 @@ import { getContentState, updateContentState } from "../../api"
 import { initialContents } from "../../config"
 
 type PropTypes = {
-  idx: number
+  contentIdx: number,
+}
+type OutletContextProps = {
+  onClick: (idx: number) => void
 }
 
-export default function Content() {
+export default function Content({ contentIdx }: PropTypes) {
   const navigate = useNavigate()
-  const { idx } = useOutletContext<PropTypes>()
-  const [contentIdx, setContentIdx] = useState(idx)
+  const { onClick } = useOutletContext<OutletContextProps>()
+  // const [contentIdx, setContentIdx] = useState(idx)
 
   const messageHandler = async (e: MessageEvent) => {
     if (e.origin !== location.origin) return
@@ -19,7 +22,9 @@ export default function Content() {
         const prevContentState = await getContentState()
         prevContentState[contentIdx].state = e.data.isSuccess ? 'success' : 'failure'
         await updateContentState(prevContentState)
-        setContentIdx(n => n + 1)
+        // setContentIdx(n => n + 1)
+        // navigate(`/main/${contentIdx + 1 >= initialContents.length ? 'clear' : initialContents[contentIdx + 1].path}`)
+        onClick(contentIdx + 1)
       } catch (e) {
         console.error(e)
         alert('서버에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.')
@@ -27,9 +32,9 @@ export default function Content() {
     }
   }
   
-  useEffect(() => {
-    setContentIdx(idx)
-  }, [idx])
+  // useEffect(() => {
+  //   setContentIdx(idx)
+  // }, [idx])
   useEffect(() => {
     window.addEventListener('message', messageHandler)
     navigate(`/main/${contentIdx >= initialContents.length ? 'clear' : initialContents[contentIdx].path}`)

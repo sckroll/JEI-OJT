@@ -20,7 +20,7 @@ const ButtonWrapper = ({ children }: ButtonWrapperProps) => {
 
 export default function FooterButtons({ contentIdx, onClick }: FooterButtonsFrops) {
   const contentState = useContext(ContentContext)
-  
+
   return (
     <ButtonWrapper>
       { contentState.map(({ id, name, state }, idx) => (

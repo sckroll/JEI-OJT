@@ -56,7 +56,7 @@ function App() {
               <Route path='*' element={<Navigate to='tutorial' />}></Route>
               <Route path='clear' element={<Clear />}></Route>
               { initialContents.map(({ id, path }) => (
-                <Route key={id} path={path} element={<Content />}></Route>
+                <Route key={id} path={path} element={<Content contentIdx={id} />}></Route>
               )) }
             </Route>
             <Route path='/my-page' element={<MyPage />}></Route>

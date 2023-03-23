@@ -37,7 +37,7 @@ export default function Main() {
   return (
     <>
       <HeaderMenu />
-      <Outlet context={{ idx: contentIdx }} />
+      <Outlet context={{ onClick }} />
       <FooterButtons contentIdx={contentIdx} onClick={onClick} />
     </>
   )
